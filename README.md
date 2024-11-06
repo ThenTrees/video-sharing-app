@@ -16,6 +16,7 @@ Trước khi bắt đầu, hãy đảm bảo rằng bạn đã cài đặt các 
     ```
 
 -   **HƯỚNG DẪN CLONE VA CHẠY PROJECT TRÊN VSCODE**:
+
     ````bash
     git clone https://github.com/ThenTrees/video-sharing-app.git
     vào VSC chọn open folder chọn thư mục vừa clone về
@@ -23,3 +24,9 @@ Trước khi bắt đầu, hãy đảm bảo rằng bạn đã cài đặt các 
     npm start -> w
     ```
     ````
+
+-   navigation:
+    npm install @react-navigation/native @react-navigation/native-stack
+    npx expo install react-native-screens react-native-safe-area-context
+-   run on web with mobile simulator
+    npx expo install react-native-web react-dom @expo/metro-runtime
