@@ -30,3 +30,5 @@ Trước khi bắt đầu, hãy đảm bảo rằng bạn đã cài đặt các 
     npx expo install react-native-screens react-native-safe-area-context
 -   run on web with mobile simulator
     npx expo install react-native-web react-dom @expo/metro-runtime
+-   video
+    npx expo install expo-av

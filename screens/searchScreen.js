@@ -8,6 +8,7 @@ import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
 import Icon from "react-native-vector-icons/EvilIcons";
 import { useState } from "react";
 import NavComponent from "../components/navComponent";
+import Line from "../components/line";
 
 const data = [
     {
@@ -161,14 +162,7 @@ export default function SearchScreen({ navigation }) {
                     size={24}
                 />
             </TouchableOpacity>
-            <View
-                style={{
-                    width: "100%",
-                    height: 1,
-                    backgroundColor: "#ccc",
-                    marginBottom: 10,
-                }}
-            ></View>
+            <Line />
             <Text style={styles.maybe}>Maybe you're interesting</Text>
 
             <View style={styles.sussgestion}>
@@ -194,14 +188,7 @@ export default function SearchScreen({ navigation }) {
                     </Text>
                 </TouchableOpacity>
             </View>
-            <View
-                style={{
-                    width: "100%",
-                    height: 1,
-                    backgroundColor: "#ccc",
-                    marginBottom: 10,
-                }}
-            ></View>
+            <Line />
             <NavComponent />
         </ScrollView>
     );

@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import NavComponent from "../components/navComponent.js";
-
+import Line from "../components/line.js";
 const dataTopTrending = [
     {
         id: "1",
@@ -206,14 +206,8 @@ export default function homeScreen({ navigation }) {
                     />
                 </TouchableOpacity>
             </View>
-            <View
-                style={{
-                    width: "100%",
-                    height: 1,
-                    backgroundColor: "#ccc",
-                    marginBottom: 10,
-                }}
-            ></View>
+            {/* line */}
+            <Line />
             {/* Story Section */}
             <SafeAreaView style={styles.listStory}>
                 <FlatList
@@ -358,14 +352,7 @@ export default function homeScreen({ navigation }) {
                 />
             </SafeAreaView>
             {/* nav */}
-            <View
-                style={{
-                    width: "100%",
-                    height: 1,
-                    backgroundColor: "#ccc",
-                    marginBottom: 10,
-                }}
-            ></View>
+            <Line />
             <NavComponent />
         </ScrollView>
     );
