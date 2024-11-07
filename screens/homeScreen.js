@@ -150,7 +150,7 @@ const dataAudio = [
     },
 ];
 
-export default function homeScreen({ navigation }) {
+export default function HomeScreen({ navigation }) {
     // Hàm renderItem cho phần Stories
     const renderItem1 = ({ item }) => (
         <TouchableOpacity style={styles.padTouch}>
@@ -191,169 +191,173 @@ export default function homeScreen({ navigation }) {
             vertical={true}
             showsVerticalScrollIndicator={false}
         >
-            {/* header */}
-            <View style={styles.header}>
-                <Image
-                    style={styles.logoIcon}
-                    source={require("../assets/favicon.png")}
-                />
-                <Text style={styles.textApp}>Video Sharing App</Text>
-                <TouchableOpacity style={{ marginRight: 10 }}>
-                    <Ionicons
-                        name="notifications-outline"
-                        size={24}
-                        color="black"
+            <SafeAreaView>
+                {/* header */}
+                <View style={styles.header}>
+                    <Image
+                        style={styles.logoIcon}
+                        source={require("../assets/favicon.png")}
                     />
-                </TouchableOpacity>
-            </View>
-            {/* line */}
-            <Line />
-            {/* Story Section */}
-            <SafeAreaView style={styles.listStory}>
-                <FlatList
-                    data={dataStories}
-                    renderItem={renderItem1}
-                    keyExtractor={(item) => item.id}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                />
-            </SafeAreaView>
-            {/* Top Trending Section */}
-            <SafeAreaView style={{ marginTop: 15, marginBottom: 20 }}>
-                <View
-                    style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                    }}
-                >
-                    <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                        Top trending
-                    </Text>
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate("VideoStreaming")}
+                    <Text style={styles.textApp}>Video Sharing App</Text>
+                    <TouchableOpacity style={{ marginRight: 10 }}>
+                        <Ionicons
+                            name="notifications-outline"
+                            size={24}
+                            color="black"
+                        />
+                    </TouchableOpacity>
+                </View>
+                {/* line */}
+                <Line />
+                {/* Story Section */}
+                <SafeAreaView style={styles.listStory}>
+                    <FlatList
+                        data={dataStories}
+                        renderItem={renderItem1}
+                        keyExtractor={(item) => item.id}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                    />
+                </SafeAreaView>
+                {/* Top Trending Section */}
+                <SafeAreaView style={{ marginTop: 15, marginBottom: 20 }}>
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                        }}
                     >
-                        <Image
-                            source={require("../assets/Home_Video_Listing/Button1.png")}
-                        />
-                    </TouchableOpacity>
-                </View>
+                        <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                            Top trending
+                        </Text>
+                        <TouchableOpacity
+                            onPress={() =>
+                                navigation.navigate("VideoStreaming")
+                            }
+                        >
+                            <Image
+                                source={require("../assets/Home_Video_Listing/Button1.png")}
+                            />
+                        </TouchableOpacity>
+                    </View>
 
-                <FlatList
-                    data={dataTopTrending}
-                    renderItem={renderItem}
-                    keyExtractor={(item) => item.id}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ marginTop: 10 }}
-                />
-            </SafeAreaView>
-            {/* Browse Section */}
-            <View style={{ marginTop: 25, marginBottom: 20 }}>
-                <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                    Browse topic
-                </Text>
-                <View style={[styles.viewTopic, { marginTop: 10 }]}>
-                    <TouchableOpacity>
-                        <Image
-                            source={require("../assets/Home_Video_Listing/Container4.png")}
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Image
-                            source={require("../assets/Home_Video_Listing/Container5.png")}
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Image
-                            source={require("../assets/Home_Video_Listing/Container6.png")}
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Image
-                            source={require("../assets/Home_Video_Listing/Container7.png")}
-                        />
-                    </TouchableOpacity>
-                </View>
-                <View style={[styles.viewTopic, { marginTop: 10 }]}>
-                    <TouchableOpacity>
-                        <Image
-                            source={require("../assets/Home_Video_Listing/Container8.png")}
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Image
-                            source={require("../assets/Home_Video_Listing/Container9.png")}
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Image
-                            source={require("../assets/Home_Video_Listing/Container10.png")}
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Image
-                            source={require("../assets/Home_Video_Listing/Container36.png")}
-                        />
-                    </TouchableOpacity>
-                </View>
-            </View>
-            {/* Streaming Section */}
-            <SafeAreaView style={{ marginTop: 20, marginBottom: 20 }}>
-                <View
-                    style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                    }}
-                >
+                    <FlatList
+                        data={dataTopTrending}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item.id}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={{ marginTop: 10 }}
+                    />
+                </SafeAreaView>
+                {/* Browse Section */}
+                <View style={{ marginTop: 25, marginBottom: 20 }}>
                     <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                        Streaming
+                        Browse topic
                     </Text>
-                    <TouchableOpacity>
-                        <Image
-                            source={require("../assets/Home_Video_Listing/Button1.png")}
-                        />
-                    </TouchableOpacity>
+                    <View style={[styles.viewTopic, { marginTop: 10 }]}>
+                        <TouchableOpacity>
+                            <Image
+                                source={require("../assets/Home_Video_Listing/Container4.png")}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image
+                                source={require("../assets/Home_Video_Listing/Container5.png")}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image
+                                source={require("../assets/Home_Video_Listing/Container6.png")}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image
+                                source={require("../assets/Home_Video_Listing/Container7.png")}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={[styles.viewTopic, { marginTop: 10 }]}>
+                        <TouchableOpacity>
+                            <Image
+                                source={require("../assets/Home_Video_Listing/Container8.png")}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image
+                                source={require("../assets/Home_Video_Listing/Container9.png")}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image
+                                source={require("../assets/Home_Video_Listing/Container10.png")}
+                            />
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Image
+                                source={require("../assets/Home_Video_Listing/Container36.png")}
+                            />
+                        </TouchableOpacity>
+                    </View>
                 </View>
+                {/* Streaming Section */}
+                <SafeAreaView style={{ marginTop: 20, marginBottom: 20 }}>
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                            Streaming
+                        </Text>
+                        <TouchableOpacity>
+                            <Image
+                                source={require("../assets/Home_Video_Listing/Button1.png")}
+                            />
+                        </TouchableOpacity>
+                    </View>
 
-                <FlatList
-                    data={dataStreaming}
-                    renderItem={renderItem}
-                    keyExtractor={(item) => item.id}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ marginTop: 10 }}
-                />
-            </SafeAreaView>
-            {/* Audio Section */}
-            <SafeAreaView style={{ marginTop: 20, marginBottom: 20 }}>
-                <View
-                    style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                    }}
-                >
-                    <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                        Audio
-                    </Text>
-                    <TouchableOpacity>
-                        <Image
-                            source={require("../assets/Home_Video_Listing/Button1.png")}
-                        />
-                    </TouchableOpacity>
-                </View>
+                    <FlatList
+                        data={dataStreaming}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item.id}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={{ marginTop: 10 }}
+                    />
+                </SafeAreaView>
+                {/* Audio Section */}
+                <SafeAreaView style={{ marginTop: 20, marginBottom: 20 }}>
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                            Audio
+                        </Text>
+                        <TouchableOpacity>
+                            <Image
+                                source={require("../assets/Home_Video_Listing/Button1.png")}
+                            />
+                        </TouchableOpacity>
+                    </View>
 
-                <FlatList
-                    data={dataAudio}
-                    renderItem={renderItem2}
-                    keyExtractor={(item) => item.id}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ marginTop: 10 }}
-                />
+                    <FlatList
+                        data={dataAudio}
+                        renderItem={renderItem2}
+                        keyExtractor={(item) => item.id}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={{ marginTop: 10 }}
+                    />
+                </SafeAreaView>
+                {/* nav */}
+                <Line />
+                <NavComponent />
             </SafeAreaView>
-            {/* nav */}
-            <Line />
-            <NavComponent />
         </ScrollView>
     );
 }
