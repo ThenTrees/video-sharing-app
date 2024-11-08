@@ -16,6 +16,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import Entypo from "@expo/vector-icons/Entypo";
 import { useState } from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 const dataFilter = [
     {
@@ -94,6 +95,8 @@ const dataMusic = [
 ];
 
 export default CreateVideoFilterScreen = ({ navigation }) => {
+    const widthScreen = Dimensions.get("window").width;
+
     const [modalVisible, setModalVisible] = useState(false);
     const [modalMusicVisible, setModalMusicVisible] = useState(false);
 
@@ -156,10 +159,10 @@ export default CreateVideoFilterScreen = ({ navigation }) => {
     };
 
     return (
-        <SafeAreaView>
+        <View style={styles.container}>
             <ImageBackground
                 source={require("../assets/CreateVideoSelectFilter/Image35.png")}
-                style={{ width: "100%", height: "100%" }}
+                style={{ width: "100%", height: "100%", position: "relative" }}
             >
                 {/* header section */}
                 <View style={styles.header}>
@@ -174,7 +177,10 @@ export default CreateVideoFilterScreen = ({ navigation }) => {
                             }}
                         >
                             <Image
-                                style={{ marginLeft: 135 }}
+                                style={{
+                                    marginLeft: widthScreen / 4,
+                                    marginTop: 10,
+                                }}
                                 source={require("../assets/CreateVideoSelectFilter/Button9.png")}
                             />
                         </TouchableOpacity>
@@ -212,7 +218,50 @@ export default CreateVideoFilterScreen = ({ navigation }) => {
                         source={require("../assets/CreateVideoSelectFilter/Flash.png")}
                     />
                 </View>
+                {/* button record */}
+
+                <View
+                    style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: 20,
+                        position: "absolute",
+                        bottom: 30,
+                        flex: 1,
+                        width: "100%",
+                    }}
+                >
+                    <TouchableOpacity
+                        style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        <MaterialCommunityIcons
+                            name="emoticon-happy"
+                            size={24}
+                            color="#fff"
+                        />
+                        <Text style={{ color: "#fff" }}>Effect</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Image
+                            source={require("../assets/CreateVideo-UploadVideo/Container54.png")}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}
+                    >
+                        <FontAwesome name="photo" size={24} color="#fff" />
+                        <Text style={{ color: "#fff" }}>Upload</Text>
+                    </TouchableOpacity>
+                </View>
             </ImageBackground>
+            {/* filter */}
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -370,10 +419,13 @@ export default CreateVideoFilterScreen = ({ navigation }) => {
                     </View>
                 </View>
             </Modal>
-        </SafeAreaView>
+        </View>
     );
 };
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
     header: {
         flexDirection: "row",
         alignItems: "center",
