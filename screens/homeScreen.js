@@ -169,6 +169,15 @@ export default function HomeScreen({ navigation }) {
         </TouchableOpacity>
     );
 
+    const renderItemStream = ({ item }) => (
+        <TouchableOpacity
+            style={[styles.padTouch, { marginLeft: item.marginLeft }]}
+            onPress={() => navigation.navigate("VideoStreamingScreen")}
+        >
+            <Image source={item.image} />
+        </TouchableOpacity>
+    );
+
     // Hàm renderItem cho phần audio
     const renderItem2 = ({ item }) => (
         <TouchableOpacity style={{ paddingRight: 15 }}>
@@ -178,13 +187,6 @@ export default function HomeScreen({ navigation }) {
         </TouchableOpacity>
     );
 
-    // Hàm renderIcon
-    // const renderIcon = ({ item }) => (
-    //     <TouchableOpacity style={{ marginLeft: item.marginLeft }}>
-    //         <Icon name={item.name} size={item.size} color={item.color} />
-    //         <Text style={{ color: item.color }}>{item.title}</Text>
-    //     </TouchableOpacity>
-    // );
     return (
         <ScrollView
             style={styles.container}
@@ -319,7 +321,7 @@ export default function HomeScreen({ navigation }) {
 
                     <FlatList
                         data={dataStreaming}
-                        renderItem={renderItem}
+                        renderItem={renderItemStream}
                         keyExtractor={(item) => item.id}
                         horizontal={true}
                         showsHorizontalScrollIndicator={false}

@@ -15,7 +15,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 export default function App() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="VideoStreamingScreen">
+            <Stack.Navigator initialRouteName="HomeScreen">
                 <Stack.Screen
                     name="HomeScreen"
                     component={homeScreen}
