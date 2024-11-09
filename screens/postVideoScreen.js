@@ -5,11 +5,12 @@ import { TextInput, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Line from "../components/line";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import Entypo from "@expo/vector-icons/Entypo";
 export default PostVideoScreen = () => {
     const navigation = useNavigation();
     return (
-        <ScrollView style={styles.container}>
-            <SafeAreaView>
+        <SafeAreaView style={styles.container}>
+            <ScrollView>
                 <View style={styles.header}>
                     <TouchableOpacity
                         style={{ padding: 10 }}
@@ -29,13 +30,13 @@ export default PostVideoScreen = () => {
                 <Line />
                 <View style={styles.imageContainer}>
                     <Image
-                        source={require("../assets/CreateVideo-PostVideo/Image56.png")}
+                        source={require("../assets/CreateVideoPostVideo/Image56.png")}
                         style={styles.image}
                         resizeMode="contain"
                     />
                     <TouchableOpacity>
                         <Image
-                            source={require("../assets/CreateVideo-PostVideo/Button16.png")}
+                            source={require("../assets/CreateVideoPostVideo/Button16.png")}
                         />
                     </TouchableOpacity>
                 </View>
@@ -60,96 +61,136 @@ export default PostVideoScreen = () => {
 
                 <View style={styles.itemContainer1}>
                     <Image
-                        source={require("../assets/CreateVideo-PostVideo/Addhashtag.png")}
+                        source={require("../assets/CreateVideoPostVideo/Addhashtag.png")}
                     />
                     <Image
-                        source={require("../assets/CreateVideo-PostVideo/Tag5.png")}
+                        source={require("../assets/CreateVideoPostVideo/Tag5.png")}
                     />
                 </View>
 
                 <View style={styles.itemContainer2}>
                     <Image
-                        source={require("../assets/CreateVideo-PostVideo/Tagsomeone.png")}
+                        source={require("../assets/CreateVideoPostVideo/Tagsomeone.png")}
                     />
                     <Image
-                        source={require("../assets/CreateVideo-PostVideo/Tag6.png")}
-                    />
-                </View>
-
-                <View style={styles.itemContainer3}>
-                    <Image
-                        source={require("../assets/CreateVideo-PostVideo/Comments.png")}
-                    />
-                    <Image
-                        source={require("../assets/CreateVideo-PostVideo/Switch1.png")}
+                        source={require("../assets/CreateVideoPostVideo/Tag6.png")}
                     />
                 </View>
 
                 <View style={styles.itemContainer3}>
                     <Image
-                        source={require("../assets/CreateVideo-PostVideo/Whocanwatch.png")}
+                        source={require("../assets/CreateVideoPostVideo/Comments.png")}
                     />
                     <Image
-                        source={require("../assets/CreateVideo-PostVideo/DropdownButton1.png")}
+                        source={require("../assets/CreateVideoPostVideo/Switch1.png")}
+                    />
+                </View>
+
+                <View style={styles.itemContainer3}>
+                    <Image
+                        source={require("../assets/CreateVideoPostVideo/Whocanwatch.png")}
+                    />
+                    <Image
+                        source={require("../assets/CreateVideoPostVideo/DropdownButton1.png")}
                     />
                 </View>
 
                 <View style={styles.itemContainer1}>
                     <Image
-                        source={require("../assets/CreateVideo-PostVideo/Alsoposton.png")}
+                        source={require("../assets/CreateVideoPostVideo/Alsoposton.png")}
                     />
                 </View>
 
                 <View style={styles.itemContainer3}>
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                            gap: 10,
+                        }}
+                    >
+                        <Entypo
+                            name="facebook-with-circle"
+                            size={24}
+                            color="black"
+                        />
+                        <Image
+                            source={require("../assets/CreateVideoPostVideo/Facebook.png")}
+                        />
+                    </View>
                     <Image
-                        source={require("../assets/CreateVideo-PostVideo/Facebook.png")}
-                    />
-                    <Image
-                        source={require("../assets/CreateVideo-PostVideo/Switch2.png")}
+                        source={require("../assets/CreateVideoPostVideo/Switch2.png")}
                     />
                 </View>
 
                 <View style={styles.itemContainer3}>
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                            gap: 10,
+                        }}
+                    >
+                        <Entypo
+                            name="twitter-with-circle"
+                            size={24}
+                            color="black"
+                        />
+                        <Image
+                            source={require("../assets/CreateVideoPostVideo/Twitter.png")}
+                        />
+                    </View>
                     <Image
-                        source={require("../assets/CreateVideo-PostVideo/Twitter.png")}
-                    />
-                    <Image
-                        source={require("../assets/CreateVideo-PostVideo/Switch3.png")}
+                        source={require("../assets/CreateVideoPostVideo/Switch3.png")}
                     />
                 </View>
 
                 <View style={styles.itemContainer3}>
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                            gap: 10,
+                        }}
+                    >
+                        <Entypo
+                            name="instagram-with-circle"
+                            size={24}
+                            color="black"
+                        />
+                        <Image
+                            source={require("../assets/CreateVideoPostVideo/Instagram.png")}
+                        />
+                    </View>
                     <Image
-                        source={require("../assets/CreateVideo-PostVideo/Instagram.png")}
-                    />
-                    <Image
-                        source={require("../assets/CreateVideo-PostVideo/Switch4.png")}
+                        source={require("../assets/CreateVideoPostVideo/Switch4.png")}
                     />
                 </View>
                 <View style={styles.itemContainer3}>
                     <TouchableOpacity>
                         <Image
-                            source={require("../assets/CreateVideo-PostVideo/Button17.png")}
+                            source={require("../assets/CreateVideoPostVideo/Button17.png")}
                         />
                     </TouchableOpacity>
                     <TouchableOpacity>
                         <Image
-                            source={require("../assets/CreateVideo-PostVideo/Button18.png")}
+                            source={require("../assets/CreateVideoPostVideo/Button18.png")}
                         />
                     </TouchableOpacity>
                 </View>
-            </SafeAreaView>
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     );
 };
-
-const { width, height } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#fff",
-        padding: 10,
+        paddingTop: 30,
     },
     header: {
         flexDirection: "row",
@@ -185,19 +226,19 @@ const styles = StyleSheet.create({
     },
     itemContainer1: {
         marginBottom: 20,
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
     },
     itemContainer2: {
         flexDirection: "row",
         marginBottom: 20,
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
         alignItems: "center",
     },
     itemContainer3: {
         flexDirection: "row",
         justifyContent: "space-between",
         marginBottom: 20,
-        paddingHorizontal: 40,
+        paddingHorizontal: 10,
         alignItems: "center",
     },
 });

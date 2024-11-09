@@ -53,7 +53,7 @@ const MyVideos = () => {
                         </View>
                         <View
                             style={{
-                                borderWidth: 0.3,
+                                borderWidth: 1,
                                 borderColor: "black",
                                 padding: 10,
                                 borderRadius: 10,
@@ -72,12 +72,6 @@ const MyVideos = () => {
                 </View>
             )}
             keyExtractor={(item) => item.id}
-            contentContainerStyle={{
-                width: "100%",
-                paddingHorizontal: 10,
-                marginTop: 30,
-                flex: 1,
-            }}
         />
     );
 };
@@ -101,12 +95,13 @@ const MyImages = () => {
                         <Image
                             source={item.image}
                             style={{ height: 50, width: 50 }}
+                            resizeMode="contain"
                         />
                         <Text style={{ marginLeft: 10 }}>{item.name}</Text>
                     </View>
                     <View
                         style={{
-                            borderWidth: 0.3,
+                            borderWidth: 1,
                             borderColor: "black",
                             padding: 10,
                             borderRadius: 10,
@@ -117,12 +112,6 @@ const MyImages = () => {
                 </TouchableOpacity>
             )}
             keyExtractor={(item) => item.id}
-            contentContainerStyle={{
-                width: "100%",
-                paddingHorizontal: 10,
-                marginTop: 30,
-                flex: 1,
-            }}
         />
     );
 };
@@ -146,17 +135,10 @@ const MyVideosTabView = ({ navigation }) => {
             {...props}
             indicatorStyle={styles.indicator}
             style={styles.tabBar}
+            inactiveColor="#000"
+            activeColor="#f44b86"
             renderLabel={({ route, focused }) => (
-                <Text
-                    style={[
-                        styles.tabLabel,
-                        focused
-                            ? styles.activeTabLabel
-                            : styles.inactiveTabLabel,
-                    ]}
-                >
-                    {route.title}
-                </Text>
+                <Text style={[styles.tabLabel]}>{route.title}</Text>
             )}
         />
     );
@@ -167,7 +149,6 @@ const MyVideosTabView = ({ navigation }) => {
             renderScene={renderScene}
             renderTabBar={renderTabBar}
             onIndexChange={setIndex}
-            initialLayout={{ width: widthScreen }}
         />
     );
 };
@@ -220,129 +201,124 @@ const dataFollowing = [
 
 export default function FollowingScreen({ navigation }) {
     return (
-        <ScrollView>
-            <SafeAreaView>
-                <View style={styles.container}>
-                    <View style={styles.head}>
-                        <View style={styles.leftHead}>
-                            <Icon2
-                                name="angle-left"
-                                size={30}
-                                color="black"
-                                onPress={() => navigation.goBack()}
-                            />
-                            <Image
-                                style={{
-                                    height: 50,
-                                    width: 50,
-                                    marginHorizontal: 10,
-                                }}
-                                source={require("../assets/MyProfile/Container71.png")}
-                            />
-                            <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                                Ruth Sanders
-                            </Text>
-                        </View>
-                        <View style={styles.leftHead}>
-                            <TouchableOpacity>
-                                <Icon2
-                                    style={{ paddingHorizontal: 5 }}
-                                    name="search"
-                                    size={20}
-                                    color="black"
-                                />
-                            </TouchableOpacity>
-                            <TouchableOpacity>
-                                <Icon2
-                                    style={{ paddingHorizontal: 5 }}
-                                    name="bars"
-                                    size={20}
-                                    color="black"
-                                />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+        <View style={styles.container}>
+            <View style={styles.head}>
+                <View style={styles.leftHead}>
+                    <Icon2
+                        name="angle-left"
+                        size={30}
+                        color="black"
+                        onPress={() => navigation.goBack()}
+                    />
+                    <Image
+                        style={{
+                            height: 50,
+                            width: 50,
+                            marginHorizontal: 10,
+                        }}
+                        source={require("../assets/MyProfile/Container71.png")}
+                    />
+                    <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                        Ruth Sanders
+                    </Text>
+                </View>
+                <View style={styles.leftHead}>
+                    <TouchableOpacity>
+                        <Icon2
+                            style={{ paddingHorizontal: 5 }}
+                            name="search"
+                            size={20}
+                            color="black"
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Icon2
+                            style={{ paddingHorizontal: 5 }}
+                            name="bars"
+                            size={20}
+                            color="black"
+                        />
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <MyVideosTabView />
 
-                    <MyVideosTabView />
-
-                    <View>
-                        <Text
+            <View style={{ flex: 1 }}>
+                <Text
+                    style={{
+                        backgroundColor: "#eee",
+                        padding: 10,
+                        fontWeight: "bold",
+                        fontSize: 16,
+                    }}
+                >
+                    Suggestion for you
+                </Text>
+                <FlatList
+                    data={dataGoiY}
+                    renderItem={({ item }) => (
+                        <View
                             style={{
-                                backgroundColor: "#eee",
-                                padding: 10,
-                                fontWeight: "bold",
-                                fontSize: 16,
+                                flexDirection: "row",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                padding: 5,
                             }}
                         >
-                            Suggestion for you
-                        </Text>
-                        <FlatList
-                            data={dataGoiY}
-                            renderItem={({ item }) => (
+                            <TouchableOpacity style={styles.cardPeople}>
                                 <View
                                     style={{
                                         flexDirection: "row",
-                                        justifyContent: "center",
                                         alignItems: "center",
-                                        padding: 5,
                                     }}
                                 >
-                                    <TouchableOpacity style={styles.cardPeople}>
-                                        <View
-                                            style={{
-                                                flexDirection: "row",
-                                                alignItems: "center",
-                                            }}
-                                        >
-                                            <Image
-                                                source={item.image}
-                                                style={{
-                                                    height: 50,
-                                                    width: 50,
-                                                    marginLeft: 10,
-                                                }}
-                                            />
-                                            <Text style={{ marginLeft: 10 }}>
-                                                {item.name}
-                                            </Text>
-                                        </View>
-                                        <View
-                                            style={{
-                                                paddingVertical: 10,
-                                                paddingHorizontal: 20,
-                                                borderRadius: 10,
-                                                backgroundColor: "#00BFFF",
-                                            }}
-                                        >
-                                            <Text
-                                                style={{
-                                                    color: "white",
-                                                    fontWeight: "500",
-                                                }}
-                                            >
-                                                Follow
-                                            </Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={{ padding: 5 }}>
-                                        <AntDesign
-                                            name="close"
-                                            size={24}
-                                            color="black"
-                                        />
-                                    </TouchableOpacity>
+                                    <Image
+                                        source={item.image}
+                                        style={{
+                                            height: 50,
+                                            width: 50,
+                                            marginLeft: 10,
+                                        }}
+                                    />
+                                    <Text style={{ marginLeft: 10 }}>
+                                        {item.name}
+                                    </Text>
                                 </View>
-                            )}
-                            keyExtractor={(item) => item.id}
-                            contentContainerStyle={{
-                                width: "100%",
-                                paddingHorizontal: 10,
-                            }}
-                        />
-                    </View>
-                </View>
-            </SafeAreaView>
-        </ScrollView>
+                                <View
+                                    style={{
+                                        paddingVertical: 10,
+                                        paddingHorizontal: 20,
+                                        borderRadius: 10,
+                                        backgroundColor: "#00BFFF",
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            color: "white",
+                                            fontWeight: "500",
+                                        }}
+                                    >
+                                        Follow
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{ padding: 5 }}>
+                                <AntDesign
+                                    name="close"
+                                    size={24}
+                                    color="black"
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    )}
+                    keyExtractor={(item) => item.id}
+                    contentContainerStyle={{
+                        width: "100%",
+                        paddingHorizontal: 10,
+                    }}
+                />
+            </View>
+        </View>
     );
 }
 
@@ -350,7 +326,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#fff",
-        paddingTop: 10,
+        paddingTop: 40,
     },
     head: {
         paddingHorizontal: 10,
@@ -360,9 +336,6 @@ const styles = StyleSheet.create({
     leftHead: {
         flexDirection: "row",
         alignItems: "center",
-    },
-    scene: {
-        height: 200,
     },
     tabBar: {
         backgroundColor: "white",

@@ -1,12 +1,12 @@
-import { TouchableOpacity } from "react-native";
 import {
     SafeAreaView,
     StyleSheet,
     Text,
     View,
     Image,
-    ScrollView,
     FlatList,
+    TouchableOpacity,
+    ScrollView,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import NavComponent from "../components/navComponent.js";
@@ -80,49 +80,6 @@ const dataStreaming = [
     },
 ];
 
-const dataNav = [
-    {
-        id: "1",
-        name: "film",
-        title: "Home",
-        marginLeft: -10,
-        color: "pink",
-        size: 20,
-    },
-    {
-        id: "2",
-        name: "check",
-        title: "Search",
-        marginLeft: 0,
-        color: "grey",
-        size: 20,
-    },
-    {
-        id: "3",
-        name: "plus",
-        title: "",
-        marginLeft: 0,
-        color: "pink",
-        size: 30,
-    },
-    {
-        id: "4",
-        name: "list",
-        title: "Friends",
-        marginLeft: 0,
-        color: "grey",
-        size: 20,
-    },
-    {
-        id: "5",
-        name: "user",
-        title: "My Profile",
-        marginLeft: 0,
-        color: "grey",
-        size: 20,
-    },
-];
-
 const dataAudio = [
     {
         id: "1",
@@ -188,11 +145,8 @@ export default function HomeScreen({ navigation }) {
     );
 
     return (
-        <ScrollView
-            style={styles.container}
-            showsVerticalScrollIndicator={false}
-        >
-            <SafeAreaView>
+        <SafeAreaView style={styles.container}>
+            <ScrollView>
                 {/* header */}
                 <View style={styles.header}>
                     <Image
@@ -358,8 +312,8 @@ export default function HomeScreen({ navigation }) {
                 {/* nav */}
                 <Line />
                 <NavComponent />
-            </SafeAreaView>
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     );
 }
 
@@ -367,8 +321,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#fff",
-        padding: 15,
-        width: "100%",
+        paddingTop: 30,
+        paddingBottom: 20,
+        paddingHorizontal: 10,
     },
     listStory: {
         paddingVertical: 15,

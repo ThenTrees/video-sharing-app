@@ -2,6 +2,18 @@ import { Dimensions, FlatList, TouchableOpacity } from "react-native";
 import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { useState } from "react";
+import NavComponent from "../components/navComponent";
+const dataVideos = [
+    { id: "1", image: require("../assets/MyProfile/Container72.png") },
+    { id: "2", image: require("../assets/MyProfile/Container73.png") },
+    { id: "3", image: require("../assets/MyProfile/Container74.png") },
+    { id: "4", image: require("../assets/MyProfile/Container75.png") },
+    { id: "5", image: require("../assets/MyProfile/Container76.png") },
+    { id: "6", image: require("../assets/MyProfile/Container77.png") },
+    { id: "7", image: require("../assets/MyProfile/Container78.png") },
+    { id: "8", image: require("../assets/MyProfile/Container79.png") },
+    { id: "9", image: require("../assets/MyProfile/Container80.png") },
+];
 
 const MyVideos = () => {
     return (
@@ -10,10 +22,7 @@ const MyVideos = () => {
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
                 <TouchableOpacity style={styles.videoItem}>
-                    <Image
-                        // style={{ width: Dimensions.widthScreen("window") / 3 }}
-                        source={item.image}
-                    />
+                    <Image source={item.image} />
                 </TouchableOpacity>
             )}
             keyExtractor={(item) => item.id}
@@ -57,18 +66,6 @@ const MyLiked = () => {
     );
 };
 
-const dataVideos = [
-    { id: "1", image: require("../assets/MyProfile/Container72.png") },
-    { id: "2", image: require("../assets/MyProfile/Container73.png") },
-    { id: "3", image: require("../assets/MyProfile/Container74.png") },
-    { id: "4", image: require("../assets/MyProfile/Container75.png") },
-    { id: "5", image: require("../assets/MyProfile/Container76.png") },
-    { id: "6", image: require("../assets/MyProfile/Container77.png") },
-    { id: "7", image: require("../assets/MyProfile/Container78.png") },
-    { id: "8", image: require("../assets/MyProfile/Container79.png") },
-    { id: "9", image: require("../assets/MyProfile/Container80.png") },
-];
-
 const widthScreen = Dimensions.get("window").width;
 
 const MyVideosTabView = () => {
@@ -89,18 +86,11 @@ const MyVideosTabView = () => {
         <TabBar
             {...props}
             indicatorStyle={styles.indicator}
+            inactiveColor="#000"
+            activeColor="#f44b86"
             style={styles.tabBar}
             renderLabel={({ route, focused }) => (
-                <Text
-                    style={[
-                        styles.tabLabel,
-                        focused
-                            ? styles.activeTabLabel
-                            : styles.inactiveTabLabel,
-                    ]}
-                >
-                    {route.title}
-                </Text>
+                <Text style={[styles.tabLabel]}>{route.title}</Text>
             )}
         />
     );
@@ -135,7 +125,7 @@ export default function ProfileScreen({ navigation }) {
                         onPress={() => navigation.navigate("FollowingScreen")}
                     >
                         <Text>203</Text>
-                        <Text style={styles.textgrey}>Following</Text>
+                        <Text style={styles.textGrey}>Following</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -143,16 +133,17 @@ export default function ProfileScreen({ navigation }) {
                         onPress={() => navigation.navigate("Following")}
                     >
                         <Text>628</Text>
-                        <Text style={styles.textgrey}>Followers</Text>
+                        <Text style={styles.textGrey}>Followers</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.fl}>
                         <Text>6031</Text>
-                        <Text style={styles.textgrey}>Like</Text>
+                        <Text style={styles.textGrey}>Like</Text>
                     </TouchableOpacity>
                 </View>
             </View>
             <MyVideosTabView />
+            <NavComponent />
         </View>
     );
 }
@@ -171,8 +162,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         alignItems: "center",
     },
-    textgrey: {
+    textGrey: {
         color: "grey",
+        fontWeight: "600",
     },
     scene: {
         flex: 1,
@@ -211,11 +203,5 @@ const styles = StyleSheet.create({
     },
     tabLabel: {
         fontSize: 16,
-    },
-    activeTabLabel: {
-        color: "pink",
-    },
-    inactiveTabLabel: {
-        color: "black",
     },
 });

@@ -156,7 +156,7 @@ export default function VideoWatchingScreen({ navigation }) {
                     volume={1.0}
                     source={{ uri: item.video }}
                     style={{ width: "100%", height: "100%" }}
-                    resizeMode="contain"
+                    resizeMode="cover"
                     shouldPlay={item.id === activePosId}
                     isLooping
                 />

@@ -1,6 +1,8 @@
+"use strict";
 import {
     Dimensions,
     FlatList,
+    SafeAreaView,
     TextInput,
     TouchableOpacity,
 } from "react-native";
@@ -47,10 +49,7 @@ export default function SearchScreen({ navigation }) {
     const listTab = ["Trending", "Accounts", "Streaming", "Audio"];
     const [tab, setTab] = useState("Trending");
     return (
-        <ScrollView
-            style={styles.container}
-            showsVerticalScrollIndicator={false}
-        >
+        <SafeAreaView style={styles.container}>
             <View style={styles.head}>
                 <View style={styles.inputContainer}>
                     <TextInput
@@ -87,7 +86,10 @@ export default function SearchScreen({ navigation }) {
             <View
                 style={[
                     styles.head,
-                    { justifyContent: "space-between", paddingVertical: 10 },
+                    {
+                        justifyContent: "space-between",
+                        paddingVertical: 10,
+                    },
                 ]}
             >
                 {listTab.map((item, index) => (
@@ -146,11 +148,6 @@ export default function SearchScreen({ navigation }) {
                 )}
                 keyExtractor={(item) => item.id}
                 numColumns={2}
-                contentContainerStyle={{
-                    width: "100%",
-                    paddingHorizontal: 10,
-                    alignItems: "center",
-                }}
             />
 
             <TouchableOpacity style={styles.showMore}>
@@ -190,7 +187,7 @@ export default function SearchScreen({ navigation }) {
             </View>
             <Line />
             <NavComponent />
-        </ScrollView>
+        </SafeAreaView>
     );
 }
 
@@ -198,7 +195,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#fff",
-        padding: 10,
+        paddingTop: 40,
+        paddingHorizontal: 10,
     },
     head: {
         flexDirection: "row",
@@ -235,7 +233,8 @@ const styles = StyleSheet.create({
     },
     activeTab: {
         backgroundColor: "#f44b86",
-        padding: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 15,
         borderRadius: 20,
     },
     hasTag: {

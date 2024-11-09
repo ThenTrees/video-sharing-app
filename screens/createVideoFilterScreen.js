@@ -166,7 +166,10 @@ export default CreateVideoFilterScreen = ({ navigation }) => {
             >
                 {/* header section */}
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <TouchableOpacity
+                        style={{ padding: 10 }}
+                        onPress={() => navigation.goBack()}
+                    >
                         <AntDesign name="close" size={24} color="#fff" />
                     </TouchableOpacity>
                     <View>
@@ -245,9 +248,11 @@ export default CreateVideoFilterScreen = ({ navigation }) => {
                         />
                         <Text style={{ color: "#fff" }}>Effect</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate("PostVideoScreen")}
+                    >
                         <Image
-                            source={require("../assets/CreateVideo-UploadVideo/Container54.png")}
+                            source={require("../assets/CreateVideoUploadVideo/Container54.png")}
                         />
                     </TouchableOpacity>
                     <TouchableOpacity

@@ -9,13 +9,14 @@ import PostVideoScreen from "./screens/postVideoScreen";
 import FriendScreen from "./screens/friendScreen";
 import CreateVideoFilterScreen from "./screens/createVideoFilterScreen";
 import VideoStreamingScreen from "./screens/videoStreamingScreen.js";
-
+import LoginScreen from "./screens/loginScreen.js";
+import RegisterScreen from "./screens/registerScreen.js";
 const Stack = createNativeStackNavigator();
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 export default function App() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="HomeScreen">
+            <Stack.Navigator initialRouteName="LoginScreen">
                 <Stack.Screen
                     name="HomeScreen"
                     component={homeScreen}
@@ -64,6 +65,16 @@ export default function App() {
                 <Stack.Screen
                     name="VideoStreamingScreen"
                     component={VideoStreamingScreen}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="LoginScreen"
+                    component={LoginScreen}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="RegisterScreen"
+                    component={RegisterScreen}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>

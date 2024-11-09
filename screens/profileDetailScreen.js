@@ -1,15 +1,8 @@
-import {
-    Dimensions,
-    FlatList,
-    SafeAreaView,
-    TouchableOpacity,
-} from "react-native";
+import { Dimensions, FlatList, TouchableOpacity } from "react-native";
 import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
 import Icon2 from "react-native-vector-icons/FontAwesome";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { useState } from "react";
-import FollowingScreen from "./followingScreen";
-import Entypo from "@expo/vector-icons/Entypo";
 
 const dataVideos = [
     { id: "1", image: require("../assets/ProfileDetails/Container86.png") },
@@ -65,6 +58,7 @@ const MyVideos = () => {
             )}
             keyExtractor={(item) => item.id}
             numColumns={3}
+            contentContainerStyle={{ alignItems: "center", marginTop: 10 }}
         />
     );
 };
@@ -81,6 +75,7 @@ const MyLiked = () => {
             )}
             keyExtractor={(item) => item.id}
             numColumns={3}
+            contentContainerStyle={{ alignItems: "center", marginTop: 10 }}
         />
     );
 };
@@ -104,13 +99,14 @@ const MyVideosTabView = () => {
             {...props}
             indicatorStyle={styles.indicator}
             style={styles.tabBar}
+            inactiveColor="#f44b86"
             renderLabel={({ route, focused }) => (
                 <Text
                     style={[
                         styles.tabLabel,
                         focused
-                            ? styles.activeTabLabel
-                            : styles.inactiveTabLabel,
+                            ? styles.inactiveTabLabel
+                            : styles.activeTabLabel,
                     ]}
                 >
                     {route.title}
@@ -125,48 +121,44 @@ const MyVideosTabView = () => {
             renderScene={renderScene}
             renderTabBar={renderTabBar}
             onIndexChange={setIndex}
-            initialLayout={{ width: widthScreen }}
         />
     );
 };
 
 export default function ProfileDetailScreen({ navigation, route }) {
-    const id = route.params?.userID;
+    const id = route.params.userID;
     const filteredData = dataFollowing.filter((item) => item.id === id);
     return (
-        <ScrollView>
-            <SafeAreaView style={[styles.container]}>
-                <View style={styles.head}>
-                    <View style={styles.leftHead}>
-                        <Icon2
-                            name="angle-left"
-                            size={30}
-                            color="black"
-                            onPress={() => navigation.goBack()}
-                        />
-                    </View>
-                    <View style={styles.leftHead}>
-                        <TouchableOpacity>
-                            <Icon2
-                                style={{ paddingHorizontal: 5 }}
-                                name="bell-o"
-                                size={20}
-                                color="black"
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{ padding: 5 }}>
-                            <Entypo
-                                name="dots-three-vertical"
-                                size={20}
-                                color="black"
-                            />
-                        </TouchableOpacity>
-                    </View>
+        <View style={[styles.container]}>
+            <View style={styles.head}>
+                <View style={styles.leftHead}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <Icon2 name="angle-left" size={30} color="black" />
+                    </TouchableOpacity>
                 </View>
-                <FlatList
-                    data={filteredData}
-                    contentContainerStyle={{ height: 0 }}
-                    renderItem={({ item }) => (
+                <View style={styles.leftHead}>
+                    <TouchableOpacity>
+                        <Icon2
+                            style={{ paddingHorizontal: 5 }}
+                            name="bell-o"
+                            size={20}
+                            color="black"
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Icon2
+                            style={{ paddingHorizontal: 10 }}
+                            name="bars"
+                            size={20}
+                            color="black"
+                        />
+                    </TouchableOpacity>
+                </View>
+            </View>
+            <FlatList
+                data={filteredData}
+                renderItem={({ item }) => (
+                    <>
                         <View style={styles.imgLogo}>
                             <Image
                                 style={{ height: 100, width: 100 }}
@@ -176,116 +168,112 @@ export default function ProfileDetailScreen({ navigation, route }) {
                                 style={{
                                     fontSize: 24,
                                     fontWeight: "bold",
-                                    paddingVertical: 10,
+                                    paddingVertical: 5,
                                 }}
                             >
                                 {item.name}
                             </Text>
                             <Text style={{ fontSize: 16 }}>{item.caption}</Text>
                         </View>
-                    )}
-                    keyExtractor={(item) => item.id}
-                />
-                <View
-                    style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        marginTop: 10,
-                    }}
-                >
-                    <TouchableOpacity style={styles.fl}>
-                        <Text>203</Text>
-                        <Text style={styles.textgrey}>Following</Text>
-                    </TouchableOpacity>
+                    </>
+                )}
+                keyExtractor={(item) => item.id}
+                contentContainerStyle={{ alignItems: "center" }}
+            />
+            <View
+                style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginTop: -390,
+                }}
+            >
+                <TouchableOpacity style={styles.fl}>
+                    <Text>203</Text>
+                    <Text style={styles.textgrey}>Following</Text>
+                </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.fl}>
-                        <Text>628</Text>
-                        <Text style={styles.textgrey}>Followers</Text>
-                    </TouchableOpacity>
+                <TouchableOpacity style={styles.fl}>
+                    <Text>628</Text>
+                    <Text style={styles.textgrey}>Followers</Text>
+                </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.fl}>
-                        <Text>6031</Text>
-                        <Text style={styles.textgrey}>Like</Text>
-                    </TouchableOpacity>
-                </View>
-                <View
-                    style={{
-                        flexDirection: "row",
-                        marginTop: 15,
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    <TouchableOpacity style={styles.fl}>
-                        <Image
-                            source={require("../assets/ProfileDetails/Button21.png")}
-                        />
-                    </TouchableOpacity>
+                <TouchableOpacity style={styles.fl}>
+                    <Text>6031</Text>
+                    <Text style={styles.textgrey}>Like</Text>
+                </TouchableOpacity>
+            </View>
+            <View
+                style={{
+                    flexDirection: "row",
+                    marginTop: 15,
+                    alignItems: "center",
+                    justifyContent: "center",
+                }}
+            >
+                <TouchableOpacity style={styles.fl}>
+                    <Image
+                        source={require("../assets/ProfileDetails/Button21.png")}
+                    />
+                </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.fl}>
-                        <Image
-                            source={require("../assets/ProfileDetails/Button20.png")}
-                        />
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity style={styles.fl}>
+                    <Image
+                        source={require("../assets/ProfileDetails/Button20.png")}
+                    />
+                </TouchableOpacity>
+            </View>
+            <View style={[styles.suggest]}>
+                <TouchableOpacity style={styles.fl}>
+                    <Image
+                        source={require("../assets/ProfileDetails/Suggestedaccounts.png")}
+                    />
+                </TouchableOpacity>
 
-                <View style={[styles.suggest]}>
-                    <TouchableOpacity style={styles.fl}>
-                        <Image
-                            source={require("../assets/ProfileDetails/Suggestedaccounts.png")}
-                        />
-                    </TouchableOpacity>
+                <TouchableOpacity style={styles.fl}>
+                    <Image
+                        source={require("../assets/ProfileDetails/Viewmore.png")}
+                    />
+                </TouchableOpacity>
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 0 }}>
+                <TouchableOpacity style={styles.fl}>
+                    <Image
+                        source={require("../assets/ProfileDetails/Container83.png")}
+                    />
+                </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.fl}>
-                        <Image
-                            source={require("../assets/ProfileDetails/Viewmore.png")}
-                        />
-                    </TouchableOpacity>
-                </View>
-                <View
-                    style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                    }}
-                >
-                    <TouchableOpacity style={styles.fl}>
-                        <Image
-                            source={require("../assets/ProfileDetails/Container83.png")}
-                        />
-                    </TouchableOpacity>
+                <TouchableOpacity style={styles.fl}>
+                    <Image
+                        source={require("../assets/ProfileDetails/Container84.png")}
+                    />
+                </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.fl}>
-                        <Image
-                            source={require("../assets/ProfileDetails/Container84.png")}
-                        />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.fl}>
-                        <Image
-                            source={require("../assets/ProfileDetails/Container85.png")}
-                        />
-                    </TouchableOpacity>
-                </View>
-                <MyVideosTabView />
-            </SafeAreaView>
-        </ScrollView>
+                <TouchableOpacity style={styles.fl}>
+                    <Image
+                        source={require("../assets/ProfileDetails/Container85.png")}
+                    />
+                </TouchableOpacity>
+            </View>
+            <MyVideosTabView />
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         backgroundColor: "#fff",
-        padding: 10,
+        paddingVertical: 20,
+        paddingHorizontal: 10,
     },
     imgLogo: {
         alignItems: "center",
-        marginTop: 30,
+        padding: 20,
     },
     fl: {
+        paddingHorizontal: 15,
         alignItems: "center",
-        paddingHorizontal: 10,
     },
     textgrey: {
         color: "grey",
@@ -298,20 +286,34 @@ const styles = StyleSheet.create({
     leftHead: {
         flexDirection: "row",
         alignItems: "center",
+        marginTop: 20,
     },
     suggest: {
         flexDirection: "row",
-        marginTop: 10,
+        marginTop: 15,
         justifyContent: "space-between",
         padding: 10,
         alignItems: "center",
+        width: "100%",
+    },
+    tabViewContainer: {
+        flexDirection: "row",
+        marginTop: 20,
+        width: "100%",
+        justifyContent: "space-between",
+        paddingHorizontal: 10,
+    },
+    touchTabView: {
+        flexDirection: "row",
+        alignItems: "center",
+        paddingHorizontal: 10,
     },
     videoItem: {
         width: widthScreen / 3,
         padding: 15,
     },
     tabBar: {
-        backgroundColor: "white",
+        backgroundColor: "#fff",
         elevation: 0,
         shadowOpacity: 0,
         borderBottomWidth: 1,
