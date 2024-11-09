@@ -2,7 +2,6 @@ import { Dimensions, FlatList, TouchableOpacity } from "react-native";
 import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { useState } from "react";
-import FollowingScreen from "./followingScreen";
 
 const MyVideos = () => {
     return (

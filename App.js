@@ -1,19 +1,21 @@
 import { NavigationContainer } from "@react-navigation/native";
 import homeScreen from "./screens/homeScreen";
 import SearchScreen from "./screens/searchScreen";
-import VideoStreamingScreen from "./screens/videoStreamingScreen";
+import VideoWatchingScreen from "./screens/videoWatchingScreen.js";
 import ProfileScreen from "./screens/profileScreen";
 import FollowingScreen from "./screens/followingScreen";
 import ProfileDetailScreen from "./screens/profileDetailScreen";
 import PostVideoScreen from "./screens/postVideoScreen";
 import FriendScreen from "./screens/friendScreen";
-import createVideoFilterScreen from "./screens/createVideoFilterScreen";
+import CreateVideoFilterScreen from "./screens/createVideoFilterScreen";
+import VideoStreamingScreen from "./screens/videoStreamingScreen.js";
+
 const Stack = createNativeStackNavigator();
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 export default function App() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="createVideoFilterScreen">
+            <Stack.Navigator initialRouteName="VideoStreamingScreen">
                 <Stack.Screen
                     name="HomeScreen"
                     component={homeScreen}
@@ -25,8 +27,8 @@ export default function App() {
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen
-                    name="VideoStreamingScreen"
-                    component={VideoStreamingScreen}
+                    name="VideoWatchingScreen"
+                    component={VideoWatchingScreen}
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen
@@ -55,8 +57,13 @@ export default function App() {
                     options={{ headerShown: false }}
                 />
                 <Stack.Screen
-                    name="createVideoFilterScreen"
-                    component={createVideoFilterScreen}
+                    name="CreateVideoFilterScreen"
+                    component={CreateVideoFilterScreen}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="VideoStreamingScreen"
+                    component={VideoStreamingScreen}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>

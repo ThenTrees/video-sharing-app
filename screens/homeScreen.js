@@ -163,7 +163,7 @@ export default function HomeScreen({ navigation }) {
     const renderItem = ({ item }) => (
         <TouchableOpacity
             style={[styles.padTouch, { marginLeft: item.marginLeft }]}
-            onPress={() => navigation.navigate("VideoStreaming")}
+            onPress={() => navigation.navigate("VideoWatchingScreen")}
         >
             <Image source={item.image} />
         </TouchableOpacity>
@@ -188,7 +188,6 @@ export default function HomeScreen({ navigation }) {
     return (
         <ScrollView
             style={styles.container}
-            vertical={true}
             showsVerticalScrollIndicator={false}
         >
             <SafeAreaView>
@@ -232,7 +231,7 @@ export default function HomeScreen({ navigation }) {
                         </Text>
                         <TouchableOpacity
                             onPress={() =>
-                                navigation.navigate("VideoStreaming")
+                                navigation.navigate("VideoWatchingScreen")
                             }
                         >
                             <Image
@@ -368,7 +367,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         padding: 15,
         width: "100%",
-        height: 500,
     },
     listStory: {
         paddingVertical: 15,

@@ -2,7 +2,10 @@ import { Text, TouchableOpacity, StyleSheet, SafeAreaView } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useState } from "react";
-export default NavComponent = ({ navigation }) => {
+import { useNavigation } from "@react-navigation/native";
+
+export default function NavComponent() {
+    const navigation = useNavigation();
     const [choose, setChoose] = useState("Home");
 
     return (
@@ -10,6 +13,7 @@ export default NavComponent = ({ navigation }) => {
             <TouchableOpacity
                 onPress={() => {
                     setChoose("Home");
+                    navigation.navigate("HomeScreen");
                 }}
                 style={styles.element}
             >
@@ -31,6 +35,7 @@ export default NavComponent = ({ navigation }) => {
                 style={[styles.element]}
                 onPress={() => {
                     setChoose("Search");
+                    navigation.navigate("SearchScreen");
                 }}
             >
                 <AntDesign
@@ -50,7 +55,7 @@ export default NavComponent = ({ navigation }) => {
             <TouchableOpacity
                 style={styles.element}
                 onPress={() => {
-                    alert("Add new post");
+                    navigation.navigate("CreateVideoFilterScreen");
                 }}
             >
                 <AntDesign name="pluscircleo" size={30} color="pink" />
@@ -59,6 +64,7 @@ export default NavComponent = ({ navigation }) => {
                 style={[styles.element]}
                 onPress={() => {
                     setChoose("Friends");
+                    navigation.navigate("FriendScreen");
                 }}
             >
                 <Feather
@@ -79,6 +85,7 @@ export default NavComponent = ({ navigation }) => {
                 style={[styles.element]}
                 onPress={() => {
                     setChoose("Profile");
+                    navigation.navigate("ProfileScreen");
                 }}
             >
                 <Feather
@@ -97,7 +104,7 @@ export default NavComponent = ({ navigation }) => {
             </TouchableOpacity>
         </SafeAreaView>
     );
-};
+}
 
 const styles = StyleSheet.create({
     container: {
