@@ -438,10 +438,6 @@ const styles = StyleSheet.create({
         rowGap: 10,
         padding: 15,
     },
-    modalFilter: {
-        width: "100%",
-        height: 100,
-    },
     modalOverlay: {
         flex: 1,
         justifyContent: "flex-end",

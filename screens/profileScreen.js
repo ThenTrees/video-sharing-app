@@ -120,10 +120,12 @@ export default function ProfileScreen({ navigation }) {
     return (
         <View style={[styles.container]}>
             <View style={styles.imgLogo}>
-                <Image
-                    style={{ height: 150, width: 150 }}
-                    source={require("../assets/MyProfile/Container71.png")}
-                />
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Image
+                        style={{ height: 150, width: 150 }}
+                        source={require("../assets/MyProfile/Container71.png")}
+                    />
+                </TouchableOpacity>
                 <Text style={{ fontSize: 24, fontWeight: "bold" }}>
                     Ruth Sanders
                 </Text>

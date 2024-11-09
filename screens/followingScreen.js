@@ -11,7 +11,6 @@ import { TabView, SceneMap, TabBar } from "react-native-tab-view";
 import { useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
-// import profileDetails from "./profiledetails";
 import { useNavigation } from "@react-navigation/native";
 
 const MyVideos = () => {

@@ -8,6 +8,9 @@ import {
     Dimensions,
     SafeAreaView,
     useWindowDimensions,
+    Modal,
+    Image,
+    TextInput,
 } from "react-native";
 import { Video } from "expo-av";
 import Icon2 from "react-native-vector-icons/FontAwesome";
@@ -30,11 +33,80 @@ const post = [
     },
 ];
 
+const dataComment = [
+    {
+        id: "1",
+        name: "Laura",
+        avatar: require("../assets/VideoStreaming/Avatar23.png"),
+        comment: "So cute, I wish my cat was like that",
+        time: "6 mins ago",
+    },
+    {
+        id: "2",
+        name: "Lauren",
+        avatar: require("../assets/VideoStreaming/Avatar23.png"),
+        comment: "Look at her, as if 'mom, i want food' ",
+        time: "20 mins ago",
+    },
+    {
+        id: "3",
+        name: "Liz",
+        avatar: require("../assets/VideoStreaming/Avatar23.png"),
+        comment:
+            "My cat also often wait for me to come home from work in front of the door hehe",
+        time: "30 mins ago",
+    },
+    {
+        id: "4",
+        name: "Anne",
+        avatar: require("../assets/VideoStreaming/Avatar23.png"),
+        comment: "Awwwwwwwwww",
+        time: "30 mins ago",
+    },
+    {
+        id: "5",
+        name: "Larry",
+        avatar: require("../assets/VideoStreaming/Avatar23.png"),
+        comment: "I want to cuddle",
+        time: "20 mins ago",
+    },
+];
+
 export default function VideoWatchingScreen({ navigation }) {
     const videoRefs = useRef([]);
     const [activePosId, setActivePostId] = useState(post[0].id);
-
     const [likedPosts, setLikedPosts] = useState({});
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const renderComment = ({ item }) => {
+        return (
+            <View
+                style={{
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    alignItems: "flex-start",
+                    paddingVertical: 10,
+                    zIndex: 2,
+                }}
+            >
+                <Image source={item.avatar} reSizeMode="contain" />
+                <View style={{ marginLeft: 10, flex: 1 }}>
+                    <Text style={{ color: "#000", fontWeight: "600" }}>
+                        {item.name}
+                    </Text>
+                    <Text style={{ color: "#333", fontWeight: "500" }}>
+                        {item.comment}
+                    </Text>
+                    <Text style={{ color: "#ddd", fontWeight: "500" }}>
+                        {item.time}
+                    </Text>
+                </View>
+                <TouchableOpacity>
+                    <Entypo name="heart-outlined" size={24} color="black" />
+                </TouchableOpacity>
+            </View>
+        );
+    };
 
     const handlePlayPause = (index) => {
         const video = videoRefs.current[index];
@@ -71,14 +143,19 @@ export default function VideoWatchingScreen({ navigation }) {
     const height = useWindowDimensions().height;
 
     const renderVideo = ({ item, index }) => (
-        <SafeAreaView style={{ height }}>
+        <View
+            style={{
+                width: "100%",
+                height,
+            }}
+        >
             <TouchableOpacity onPress={() => handlePlayPause(index)}>
                 <Video
                     ref={(ref) => (videoRefs.current[index] = ref)}
                     rate={1.0}
                     volume={1.0}
                     source={{ uri: item.video }}
-                    style={{ width: "100%", height: height }}
+                    style={{ width: "100%", height: "100%" }}
                     resizeMode="contain"
                     shouldPlay={item.id === activePosId}
                     isLooping
@@ -123,7 +200,12 @@ export default function VideoWatchingScreen({ navigation }) {
                         />
                     </TouchableOpacity>
                     <Text style={{ color: "#fff" }}>19.6K</Text>
-                    <TouchableOpacity style={{ padding: 10 }}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            setModalVisible(!modalVisible);
+                        }}
+                        style={{ padding: 10 }}
+                    >
                         <Icon2 name="comment-o" size={30} color="white" />
                     </TouchableOpacity>
                     <Text style={{ color: "#fff" }}>700</Text>
@@ -139,16 +221,16 @@ export default function VideoWatchingScreen({ navigation }) {
                     </TouchableOpacity>
                 </View>
             </View>
-        </SafeAreaView>
+        </View>
     );
 
     return (
         <SafeAreaView
             style={{
                 flex: 1,
-                backgroundColor: "pink",
                 position: "relative",
-                height: height,
+                backgroundColor: "black",
+                paddingVertical: 25,
             }}
         >
             <TouchableOpacity
@@ -166,6 +248,72 @@ export default function VideoWatchingScreen({ navigation }) {
                 pagingEnabled
                 showsVerticalScrollIndicator={false}
             />
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                }}
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContainer}>
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <Text style={{ fontSize: 18, fontWeight: "600" }}>
+                                700 comments
+                            </Text>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setModalVisible(!modalVisible);
+                                }}
+                            >
+                                <AntDesign
+                                    name="close"
+                                    size={24}
+                                    color="#000"
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        {/* list comment */}
+                        <View>
+                            <FlatList
+                                data={dataComment}
+                                renderItem={renderComment}
+                                keyExtractor={(item) => item.id}
+                                contentContainerStyle={styles.listFilter}
+                            />
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                placeholder="Leave comment ..."
+                                placeholderTextColor="#caced5"
+                                style={{
+                                    backgroundColor: "#f3f4f6",
+                                    borderRadius: 10,
+                                    padding: 10,
+                                    marginVertical: 10,
+                                    fontSize: 16,
+                                    flex: 1,
+                                    marginRight: 10,
+                                }}
+                            />
+                            <TouchableOpacity>
+                                <Entypo
+                                    name="paper-plane"
+                                    size={24}
+                                    color="pink"
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </SafeAreaView>
     );
 }
@@ -180,8 +328,6 @@ const styles = StyleSheet.create({
     },
     boxIcon: {
         alignItems: "center",
-        borderWidth: 1,
-        borderColor: "white",
     },
     music: {
         flexDirection: "row",
@@ -198,5 +344,26 @@ const styles = StyleSheet.create({
         alignItems: "flex-end",
         gap: 150,
         zIndex: 2,
+    },
+    modalOverlay: {
+        flex: 1,
+        justifyContent: "flex-end",
+        backgroundColor: "rgba(0, 0, 0, 0.0)",
+    },
+    modalContainer: {
+        backgroundColor: "#fff",
+        height: "60%",
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        padding: 15,
+    },
+
+    listFilter: {
+        paddingVertical: 20,
+    },
+    inputContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
     },
 });
