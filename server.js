@@ -470,56 +470,6 @@ app.post("/insert-comment", async (req, res) => {
     }
 });
 
-// Endpoint để tao account end user
-app.post("/register", async (req, res) => {
-    const { username, sdt, email, accname, pass } = req.body;
-    const avatar = "https://imgur.com/a/QdlMMTF.png";
-    if (!username || !sdt || !email || !accname || !pass) {
-        return res
-            .status(400)
-            .json({ error: "Vui lòng cung cấp đầy đủ thông tin" });
-    }
-
-    try {
-        const pool = req.app.locals.db;
-        const transaction = new mssql.Transaction(pool);
-        await transaction.begin();
-
-        const request = transaction.request();
-        const resultUser = await request
-            .input("username", mssql.NVarChar, username)
-            .input("sdt", mssql.NVarChar, sdt)
-            .input("email", mssql.NVarChar, email + "@gmail.com")
-            .input("avatar", mssql.NVarChar, avatar).query(`
-        INSERT INTO Users (username, sdt, email, avatar, birthDay)
-        OUTPUT inserted.idUser
-        VALUES (@username, @sdt, @email, @avatar, GETDATE())
-      `);
-
-        const idUser = resultUser.recordset[0].idUser;
-        await request
-            .input("idUser", mssql.Int, idUser)
-            .input("accname", mssql.NVarChar, accname)
-            .input("pass", mssql.NVarChar, pass).query(`
-        INSERT INTO Account (idUser, username, pass)
-        VALUES (@idUser, @accname, @pass)
-      `);
-        await transaction.commit();
-
-        res.status(201).json({ message: "Tạo tài khoản thành công!" });
-    } catch (error) {
-        console.error("Lỗi cơ sở dữ liệu:", error);
-
-        try {
-            if (transaction) await transaction.rollback();
-        } catch (rollbackError) {
-            console.error("Lỗi rollback:", rollbackError);
-        }
-
-        res.status(500).json({ error: "Lỗi khi tạo tài khoản." });
-    }
-});
-
 app.get("/is-following", async (req, res) => {
     const { id_following, id_followed } = req.query;
 
