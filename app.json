@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "video-sharing-app",
-    "slug": "video-sharing-app",
+    "name": "VideoSharingApp",
+    "slug": "VideoSharingApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,6 +22,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-video"
+    ]
   }
 }
