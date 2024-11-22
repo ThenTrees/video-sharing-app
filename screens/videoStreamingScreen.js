@@ -9,7 +9,6 @@ import {
     TextInput,
 } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { useNavigation } from "@react-navigation/native";
 
 const dataComment = [
     {
@@ -27,7 +26,9 @@ const dataComment = [
     },
 ];
 
-export default function VideoStreamingScreen() {
+export default VideoStreamingScreen = ({ navigation, route }) => {
+    const user = route.params.user;
+
     const renderComment = ({ item }) => {
         return (
             <View
@@ -52,7 +53,6 @@ export default function VideoStreamingScreen() {
         );
     };
 
-    const navigation = useNavigation();
     return (
         <ImageBackground
             source={require("../assets/VideoStreaming/Image27.png")}
@@ -131,7 +131,7 @@ export default function VideoStreamingScreen() {
             </View>
         </ImageBackground>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container_full: {

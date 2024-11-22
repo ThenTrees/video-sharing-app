@@ -32,3 +32,6 @@ Trước khi bắt đầu, hãy đảm bảo rằng bạn đã cài đặt các 
     npx expo install react-native-web react-dom @expo/metro-runtime
 -   video
     npx expo install expo-av
+-   datetime
+    npm install react-native-modal-datetime-picker
+    npm install @react-native-community/datetimepicker

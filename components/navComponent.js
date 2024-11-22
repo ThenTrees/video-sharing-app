@@ -3,17 +3,16 @@ import Feather from "@expo/vector-icons/Feather";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-
-export default function NavComponent() {
+export default function NavComponent({ route }) {
     const navigation = useNavigation();
+    const user = route?.params?.user;
     const [choose, setChoose] = useState("Home");
-
     return (
         <SafeAreaView style={styles.container}>
             <TouchableOpacity
                 onPress={() => {
                     setChoose("Home");
-                    navigation.navigate("HomeScreen");
+                    navigation.navigate("HomeScreen", { user });
                 }}
                 style={styles.element}
             >
@@ -35,7 +34,7 @@ export default function NavComponent() {
                 style={[styles.element]}
                 onPress={() => {
                     setChoose("Search");
-                    navigation.navigate("SearchScreen");
+                    navigation.navigate("SearchScreen", { user });
                 }}
             >
                 <AntDesign
@@ -64,7 +63,7 @@ export default function NavComponent() {
                 style={[styles.element]}
                 onPress={() => {
                     setChoose("Friends");
-                    navigation.navigate("FriendScreen");
+                    navigation.navigate("FriendScreen", { user });
                 }}
             >
                 <Feather
@@ -85,7 +84,7 @@ export default function NavComponent() {
                 style={[styles.element]}
                 onPress={() => {
                     setChoose("Profile");
-                    navigation.navigate("ProfileScreen");
+                    navigation.navigate("ProfileScreen", { user });
                 }}
             >
                 <Feather

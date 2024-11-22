@@ -44,7 +44,8 @@ const data = [
 ];
 
 const widthScreen = Dimensions.get("window").width; // get width of screen
-export default function SearchScreen({ navigation }) {
+export default function SearchScreen({ navigation, route }) {
+    const user = route.params?.user;
     const [searchValue, setSearchValue] = useState("Pet");
     const listTab = ["Trending", "Accounts", "Streaming", "Audio"];
     const [tab, setTab] = useState("Trending");

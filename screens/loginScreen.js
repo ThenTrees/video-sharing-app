@@ -1,23 +1,55 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { TouchableOpacity } from "react-native";
-import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
+import {
+    TouchableOpacity,
+    View,
+    Text,
+    TextInput,
+    StyleSheet,
+    Alert,
+} from "react-native";
+import axios from "axios";
 
 const LoginScreen = () => {
     const navigation = useNavigation();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("t@gmail.com");
+    const [password, setPassword] = useState("a");
 
-    const handleLogin = () => {
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const handleLogin = async () => {
         if (!email || !password) {
             Alert.alert("Lỗi", "Vui lòng điền đầy đủ thông tin");
             return;
         }
 
-        if (email === "111" && password === "111") {
-            navigation.navigate("HomeScreen");
-        } else {
-            Alert.alert("Lỗi", "Thông tin đăng nhập không chính xác");
+        if (!validateEmail(email)) {
+            Alert.alert("Lỗi", "Email không đúng định dạng");
+            return;
+        }
+
+        try {
+            const response = await axios.post(
+                "http://192.168.1.124:3000/login",
+                {
+                    email,
+                    password,
+                }
+            );
+            if (response.status === 200 && response.data.user) {
+                Alert.alert("Thành công", "Đăng nhập thành công!");
+                setEmail("");
+                setPassword("");
+                navigation.navigate("HomeScreen", { user: response.data.user });
+            }
+        } catch (error) {
+            Alert.alert(
+                "Lỗi",
+                "Có lỗi xảy ra khi dang nhap: " + error.response?.data?.message
+            );
         }
     };
 
@@ -31,6 +63,7 @@ const LoginScreen = () => {
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
+                autoCapitalize="none"
             />
 
             <TextInput
@@ -42,16 +75,11 @@ const LoginScreen = () => {
             />
 
             <TouchableOpacity style={styles.btnLogin} onPress={handleLogin}>
-                <Text
-                    style={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}
-                >
-                    Đăng nhập
-                </Text>
+                <Text style={styles.btnText}>Đăng nhập</Text>
             </TouchableOpacity>
 
             <View style={styles.footer}>
                 <Text>Bạn chưa có tài khoản? </Text>
-
                 <TouchableOpacity
                     onPress={() => navigation.navigate("RegisterScreen")}
                 >
@@ -67,6 +95,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         padding: 20,
+        backgroundColor: "#f9f9f9",
     },
     title: {
         fontSize: 24,
@@ -81,20 +110,28 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         paddingLeft: 10,
         marginBottom: 15,
+        backgroundColor: "#fff",
+    },
+    btnLogin: {
+        backgroundColor: "#0066cc",
+        padding: 12,
+        borderRadius: 8,
+        alignItems: "center",
+    },
+    btnText: {
+        color: "#fff",
+        fontSize: 16,
+        fontWeight: "bold",
     },
     footer: {
         marginTop: 20,
         alignItems: "center",
+        flexDirection: "row",
+        justifyContent: "center",
     },
     link: {
         color: "#0066cc",
         fontWeight: "bold",
-    },
-    btnLogin: {
-        backgroundColor: "#0066cc",
-        padding: 10,
-        borderRadius: 8,
-        alignItems: "center",
     },
 });
 

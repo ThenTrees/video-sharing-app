@@ -11,6 +11,9 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 import NavComponent from "../components/navComponent.js";
 import Line from "../components/line.js";
+import axios from "axios";
+import React, { useState } from "react";
+
 const dataTopTrending = [
     {
         id: "1",
@@ -26,39 +29,6 @@ const dataTopTrending = [
         id: "3",
         image: require("../assets/Home_Video_Listing/Container16.png"),
         marginLeft: 0,
-    },
-];
-
-const dataStories = [
-    {
-        id: "1",
-        containerImage: require("../assets/Home_Video_Listing/Container13.png"),
-        userImage: require("../assets/Home_Video_Listing/You.png"),
-    },
-    {
-        id: "2",
-        containerImage: require("../assets/Home_Video_Listing/Container17.png"),
-        userImage: require("../assets/Home_Video_Listing/Adam.png"),
-    },
-    {
-        id: "3",
-        containerImage: require("../assets/Home_Video_Listing/Container20.png"),
-        userImage: require("../assets/Home_Video_Listing/William.png"),
-    },
-    {
-        id: "4",
-        containerImage: require("../assets/Home_Video_Listing/Container23.png"),
-        userImage: require("../assets/Home_Video_Listing/Peter.png"),
-    },
-    {
-        id: "5",
-        containerImage: require("../assets/Home_Video_Listing/Container26.png"),
-        userImage: require("../assets/Home_Video_Listing/Julia.png"),
-    },
-    {
-        id: "6",
-        containerImage: require("../assets/Home_Video_Listing/Container29.png"),
-        userImage: require("../assets/Home_Video_Listing/Rose.png"),
     },
 ];
 
@@ -107,20 +77,13 @@ const dataAudio = [
     },
 ];
 
-export default function HomeScreen({ navigation }) {
-    // Hàm renderItem cho phần Stories
-    const renderItem1 = ({ item }) => (
-        <TouchableOpacity style={styles.padTouch}>
-            <Image source={item.containerImage} />
-            <Image source={item.userImage} />
-        </TouchableOpacity>
-    );
-
+export default function HomeScreen({ navigation, route }) {
+    const user = route.params.user;
     // Hàm renderItem
     const renderItem = ({ item }) => (
         <TouchableOpacity
             style={[styles.padTouch, { marginLeft: item.marginLeft }]}
-            onPress={() => navigation.navigate("VideoWatchingScreen")}
+            onPress={() => navigation.navigate("VideoWatchingScreen", { user })}
         >
             <Image source={item.image} />
         </TouchableOpacity>
@@ -129,7 +92,9 @@ export default function HomeScreen({ navigation }) {
     const renderItemStream = ({ item }) => (
         <TouchableOpacity
             style={[styles.padTouch, { marginLeft: item.marginLeft }]}
-            onPress={() => navigation.navigate("VideoStreamingScreen")}
+            onPress={() =>
+                navigation.navigate("VideoStreamingScreen", { user })
+            }
         >
             <Image source={item.image} />
         </TouchableOpacity>
@@ -149,10 +114,6 @@ export default function HomeScreen({ navigation }) {
             <ScrollView>
                 {/* header */}
                 <View style={styles.header}>
-                    <Image
-                        style={styles.logoIcon}
-                        source={require("../assets/favicon.png")}
-                    />
                     <Text style={styles.textApp}>Video Sharing App</Text>
                     <TouchableOpacity style={{ marginRight: 10 }}>
                         <Ionicons
@@ -165,15 +126,21 @@ export default function HomeScreen({ navigation }) {
                 {/* line */}
                 <Line />
                 {/* Story Section */}
-                <SafeAreaView style={styles.listStory}>
-                    <FlatList
-                        data={dataStories}
-                        renderItem={renderItem1}
-                        keyExtractor={(item) => item.id}
-                        horizontal={true}
-                        showsHorizontalScrollIndicator={false}
+                <TouchableOpacity
+                    style={{ justifyContent: "center", alignItems: "center" }}
+                >
+                    <Image
+                        style={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: 50,
+                            borderWidth: 3,
+                        }}
+                        source={`http://192.168.1.124:3000/uploads/${user.avatar}`}
+                        resizeMode="contain"
                     />
-                </SafeAreaView>
+                    <Text>{user.user_name}</Text>
+                </TouchableOpacity>
                 {/* Top Trending Section */}
                 <SafeAreaView style={{ marginTop: 15, marginBottom: 20 }}>
                     <View
@@ -187,7 +154,9 @@ export default function HomeScreen({ navigation }) {
                         </Text>
                         <TouchableOpacity
                             onPress={() =>
-                                navigation.navigate("VideoWatchingScreen")
+                                navigation.navigate("VideoWatchingScreen", {
+                                    user,
+                                })
                             }
                         >
                             <Image
@@ -195,7 +164,6 @@ export default function HomeScreen({ navigation }) {
                             />
                         </TouchableOpacity>
                     </View>
-
                     <FlatList
                         data={dataTopTrending}
                         renderItem={renderItem}
