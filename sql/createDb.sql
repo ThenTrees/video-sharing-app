@@ -1,63 +1,67 @@
-﻿--create database db_videosharingapp
---use db_videosharingapp
-
--- Tạo bảng Users
-CREATE TABLE Users (
-    idUser INT IDENTITY(1,1) PRIMARY KEY,      -- Tự động tăng
-    username NVARCHAR(100) NOT NULL,            -- Tên người dùng
-    sdt NVARCHAR(15),                          -- Số điện thoại
-    birthDay DATE,                              -- Ngày sinh
-    avatar NVARCHAR(255),                       -- Đường dẫn ảnh đại diện
-    email NVARCHAR(255) NOT NULL                -- Email
+﻿-- Tạo bảng Users
+create table if not exists users
+(
+    id         int auto_increment
+        primary key,
+    username  varchar(100) charset utf8mb3 not null,
+    birdth_day date                         null,
+    avatar     varchar(255)                 null,
+    email      varchar(255)                 not null,
+    password   varchar(255)                 not null,
+    constraint users_pk_2
+        unique (email)
 );
 
--- Tạo bảng Account
-CREATE TABLE Account (
-    idAccount INT IDENTITY(1,1) PRIMARY KEY,   -- Tự động tăng
-    idUser INT NOT NULL,                        -- Khóa ngoại từ bảng Users
-    username NVARCHAR(100) NOT NULL,            -- Tên người dùng
-    pass NVARCHAR(255) NOT NULL,                -- Mật khẩu
-    CONSTRAINT FK_Account_User FOREIGN KEY (idUser) REFERENCES Users(idUser)
+-- table posts
+create table if not exists posts
+(
+    id            int auto_increment
+        primary key,
+    type          varchar(50) charset utf8mb3  null,
+    url           varchar(255) charset utf8mb3 null,
+    content       varchar(255) charset utf8mb3 null,
+    upload_at     datetime                     null,
+    count_like    int                          null,
+    count_comment int                          null,
+    user_id       int                          null,
+    constraint posts_users_id_fk
+        foreign key (user_id) references users (id)
 );
 
--- Tạo bảng Follow
-CREATE TABLE Follow (
-    id_following INT NOT NULL,                  -- id người dùng theo dõi
-    id_followed INT NOT NULL,                   -- id người dùng bị theo dõi
-    CONSTRAINT PK_Follow PRIMARY KEY (id_following, id_followed), 
-    CONSTRAINT FK_Follow_Following FOREIGN KEY (id_following) REFERENCES Users(idUser),
-    CONSTRAINT FK_Follow_Followed FOREIGN KEY (id_followed) REFERENCES Users(idUser)
+create table if not exists likes
+(
+    id      int auto_increment
+        primary key,
+    user_id int null,
+    post_id int null,
+    constraint likes_posts_id_fk
+        foreign key (post_id) references posts (id),
+    constraint likes_users_id_fk
+        foreign key (user_id) references users (id)
 );
 
--- Tạo bảng Post
-CREATE TABLE Post (
-    idPost INT IDENTITY(1,1) PRIMARY KEY,      -- Tự động tăng
-    idUser INT NOT NULL,                       -- id người dùng tạo bài đăng
-    type NVARCHAR(50),                         -- Loại bài đăng (video, image, story)
-    url NVARCHAR(255),                         -- Đường dẫn media (video, ảnh...)
-    content NVARCHAR(1000),                    -- Nội dung bài đăng
-    upload_at DATETIME,                        -- Thời gian đăng
-    count_like INT DEFAULT 0,                  -- Số lượng like (mặc định 0)
-    count_comment INT DEFAULT 0,               -- Số lượng comment (mặc định 0)
-    CONSTRAINT FK_Post_User FOREIGN KEY (idUser) REFERENCES Users(idUser)
+create table if not exists follows
+(
+    id_following int not null,
+    id_followed  int not null,
+    primary key (id_following, id_followed),
+    constraint follows_users_id_fk_followed
+        foreign key (id_followed) references users (id),
+    constraint follows_users_id_fk_following
+        foreign key (id_following) references users (id)
 );
 
--- Tạo bảng Like
-CREATE TABLE [Like] (
-    idLike INT IDENTITY(1,1) PRIMARY KEY,     -- Tự động tăng
-    idUser INT NOT NULL,                       -- id người dùng thích bài đăng
-    idPost INT NOT NULL,                       -- id bài đăng
-    CONSTRAINT FK_Like_User FOREIGN KEY (idUser) REFERENCES Users(idUser),
-    CONSTRAINT FK_Like_Post FOREIGN KEY (idPost) REFERENCES Post(idPost)
+create table if not exists comments
+(
+    id      int auto_increment
+        primary key,
+    post_id int      not null,
+    user_id int      null,
+    text    text     null,
+    time    datetime null,
+    constraint comments_posts_id_fk
+        foreign key (post_id) references posts (id),
+    constraint comments_users_id_fk
+        foreign key (user_id) references users (id)
 );
 
--- Tạo bảng Comment
-CREATE TABLE Comment (
-    idComment INT IDENTITY(1,1) PRIMARY KEY,  -- Tự động tăng
-    idPost INT NOT NULL,                       -- id bài đăng
-    idUser INT NOT NULL,                       -- id người dùng bình luận
-    text NVARCHAR(1000),                       -- Nội dung bình luận
-    time DATETIME,                             -- Thời gian bình luận
-    CONSTRAINT FK_Comment_User FOREIGN KEY (idUser) REFERENCES Users(idUser),
-    CONSTRAINT FK_Comment_Post FOREIGN KEY (idPost) REFERENCES Post(idPost)
-);
