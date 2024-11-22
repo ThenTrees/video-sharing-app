@@ -1,132 +1,136 @@
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Alert, ImageBackground } from 'react-native';
-import axios from 'axios';
-import Icon from 'react-native-vector-icons/EvilIcons';
-import { useState, useEffect } from 'react';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import React, { useState } from "react";
+import {
+    TouchableOpacity,
+    View,
+    Text,
+    TextInput,
+    StyleSheet,
+    Alert,
+} from "react-native";
+import axios from "axios";
 
-export default function App({navigation}) {
-  const [data, setData] = useState([]);
-  const fetchData = async () => {
-    try {
-      const response = await axios.get('http://192.168.1.141:3000/account');
-      setData(response.data);
-      setUser("")
-      setPass("")
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+export default LoginScreen = ({ navigation }) => {
+    const [email, setEmail] = useState("t@gmail.com");
+    const [password, setPassword] = useState("a");
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
 
-  const [user, setUser] = useState("");
-  const [pass, setPass] = useState("");
+    const handleLogin = async () => {
+        if (!email || !password) {
+            Alert.alert("Lỗi", "Vui lòng điền đầy đủ thông tin");
+            return;
+        }
 
-  const handleLogin = () => {
-    const checkAccount = data.find(item => item.account_user === user && item.pass === pass);
-    if(checkAccount){
-      navigation.navigate('VideoSharingApp', {userData: checkAccount });
-    }else{
-      Alert.alert('Kiểm tra lại tài khoản và mật khẩu!');
-    }
-  };
-  
-  return (
-    <ImageBackground source={require('../assets/bgL.png')} resizeMode='cover' style={styles.container}>
-      <View style={styles.overlay}>
-        <View style={styles.logo}>
-          <Text style={{color: 'pink', fontSize: 32, fontWeight: 'bold'}}>Welcome Back!</Text>
-        </View>
-        <View style={styles.viewInput}>
-          <View style={styles.input}>
-            <Icon name='user' size={30} color={'pink'}/>
-            <TextInput 
-              style={styles.textInput} 
-              placeholder='Username' 
-              placeholderTextColor={'pink'} 
-              value={user} 
-              onChangeText={setUser}
+        if (!validateEmail(email)) {
+            Alert.alert("Lỗi", "Email không đúng định dạng");
+            return;
+        }
+
+        try {
+            const response = await axios.post(
+                "http://192.168.1.124:3000/login",
+                {
+                    email,
+                    password,
+                }
+            );
+            if (response.status === 200 && response.data.user) {
+                Alert.alert("Thành công", "Đăng nhập thành công!");
+                setEmail("");
+                setPassword("");
+                navigation.navigate("VideoSharingApp", {
+                    userData: response.data.user,
+                });
+            }
+        } catch (error) {
+            Alert.alert(
+                "Lỗi",
+                "Có lỗi xảy ra khi dang nhap: " + error.response?.data?.message
+            );
+        }
+    };
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>Đăng nhập</Text>
+
+            <TextInput
+                style={styles.input}
+                placeholder="Email"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
             />
-          </View>
-          <View style={styles.input}>
-            <Icon name='lock' size={30} color={'pink'}/>
-            <TextInput 
-              style={styles.textInput} 
-              placeholder='Password' 
-              secureTextEntry 
-              placeholderTextColor={'pink'} 
-              value={pass} 
-              onChangeText={setPass}
+
+            <TextInput
+                style={styles.input}
+                placeholder="Mật khẩu"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
             />
-          </View>
 
-          <TouchableOpacity style={styles.Touch} onPress={handleLogin}>
-            <Text style={{fontSize: 24, fontWeight: 'bold', color: 'white'}}>Login</Text>
-          </TouchableOpacity>
+            <TouchableOpacity style={styles.btnLogin} onPress={handleLogin}>
+                <Text style={styles.btnText}>Đăng nhập</Text>
+            </TouchableOpacity>
 
-          <View style={styles.hr}/>
-
-          {/* Uncomment the following if you need a Register option */}
-          
-          <TouchableOpacity style={{alignSelf: 'flex-end', flexDirection: 'row'}} onPress={()=> navigation.navigate('Register')}>
-            <Text style={{fontSize: 13, color: 'white'}}>Register</Text>
-            <AntDesign name="arrowright" size={16} color="white" style={{alignSelf: 'center', paddingHorizontal: 10}}/>
-          </TouchableOpacity>
-         
+            <View style={styles.footer}>
+                <Text>Bạn chưa có tài khoản? </Text>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate("Register")}
+                >
+                    <Text style={styles.link}>Đăng ký ngay</Text>
+                </TouchableOpacity>
+            </View>
         </View>
-      </View>
-    </ImageBackground>
-  );
-}
+    );
+};
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  overlay: {
-    flex: 1,
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    padding: 20, 
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    borderRadius: 10,
-  },
-  logo: {
-    padding: 20,
-  },
-  viewInput: {
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-    width: '100%',
-  },
-  input: {
-    borderColor: 'pink',
-    borderWidth: .3,
-    borderRadius: 15,
-    padding: 10,
-    flexDirection: 'row',
-    marginVertical: 10,
-    color: 'pink',
-  },
-  textInput: {
-    marginLeft: 10,
-    flex: 1,
-    paddingHorizontal: 10,
-    color: 'pink',
-  },
-  Touch: {
-    padding: 20,
-    backgroundColor: 'pink',
-    alignItems: 'center',
-    marginTop: 30,
-    borderRadius: 15,
-  },
-  hr: {
-    width: '100%',
-    height: 1,
-    backgroundColor: 'pink',
-    marginVertical: 20,
-  },
+    container: {
+        flex: 1,
+        justifyContent: "center",
+        padding: 20,
+        backgroundColor: "#f9f9f9",
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: "bold",
+        marginBottom: 20,
+        textAlign: "center",
+    },
+    input: {
+        height: 50,
+        borderColor: "#ccc",
+        borderWidth: 1,
+        borderRadius: 8,
+        paddingLeft: 10,
+        marginBottom: 15,
+        backgroundColor: "#fff",
+    },
+    btnLogin: {
+        backgroundColor: "#0066cc",
+        padding: 12,
+        borderRadius: 8,
+        alignItems: "center",
+    },
+    btnText: {
+        color: "#fff",
+        fontSize: 16,
+        fontWeight: "bold",
+    },
+    footer: {
+        marginTop: 20,
+        alignItems: "center",
+        flexDirection: "row",
+        justifyContent: "center",
+    },
+    link: {
+        color: "#0066cc",
+        fontWeight: "bold",
+    },
 });
