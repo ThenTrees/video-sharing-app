@@ -1,204 +1,266 @@
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Alert, ImageBackground } from 'react-native';
-import axios from 'axios';
-import Icon from 'react-native-vector-icons/EvilIcons';
-import { useState, useEffect } from 'react';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import Fontisto from '@expo/vector-icons/Fontisto';
+import {
+    SafeAreaView,
+    StyleSheet,
+    TextInput,
+    View,
+    Text,
+    TouchableOpacity,
+    Image,
+    Platform,
+    Alert,
+} from "react-native";
+import { useState } from "react";
+import axios from "axios";
+import { MaterialIcons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-export default function App({navigation}) {
-  const [data, setData] = useState([]);
-  const fetchData = async () => {
-    try {
-      const response = await axios.get('http://192.168.1.141:3000/account');
-      setData(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+export default RegisterScreen = ({ navigation }) => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [retryPassword, setRetryPassword] = useState("");
+    const [email, setEmail] = useState("");
+    const [birthday, setBirthday] = useState(null);
+    const [imageUri, setImageUri] = useState(null);
+    const [imageFile, setImageFile] = useState(null);
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+    // Xử lý việc chọn ảnh từ thư viện
+    const handleImagePicker = async () => {
+        if (Platform.OS === "web") {
+            const input = document.createElement("input");
+            input.type = "file";
+            input.accept = "image/*";
+            input.onchange = (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    setImageUri(URL.createObjectURL(file));
+                    setImageFile(file);
+                }
+            };
+            input.click();
+        } else {
+            const result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [4, 3],
+                quality: 1,
+            });
 
-  const [user, setUser] = useState("");
-  const [pass, setPass] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [sdt, setSdt] = useState("");
+            if (!result.canceled) {
+                const fileExtension = result.assets[0].uri.split(".").pop(); // Lấy phần mở rộng của file
+                const newFileName = `newFile.${fileExtension}`; // Tạo tên tệp mới
 
-  const regis = () => {
-    console.log("accname "+user)
-    console.log("pass "+pass)
-    console.log("User name "+ name)
-    console.log("sdt "+sdt)
-    console.log("email "+email)
-  }
-  const InsertUser = async () => {
-    try {
-      const response = await axios.post('http://192.168.1.141:3000/register', {
-        username: name,
-        sdt, 
-        email, 
-        accname: user,
-        pass
-      });
-  
-      if (response.status === 201) {
-        Alert.alert("Thành công", "Tạo tài khoản thành công");
-        navigation.navigate('Login');
-      } else {
-        Alert.alert("Lỗi", "Đã xảy ra lỗi khi tạo tài khoản");
-      }
-    } catch (error) {
-      console.error("Lỗi khi gọi API:", error);
-      Alert.alert("Lỗi", "Không thể kết nối tới máy chủ.");
-    }
-  };
-  
-  return (
-    <ImageBackground source={require('../assets/bgL.png')} resizeMode='cover' style={styles.container}>
-      <View style={styles.overlay}>
-        <View style={styles.logo}>
-          <Text style={{color: 'pink', fontSize: 32, fontWeight: 'bold'}}>Nice to meet you!</Text>
-        </View>
-        <View style={styles.viewInput}>
-          <View style={[{width: '50%'},styles.input]}>
-            <Icon name='user' size={30} color={'pink'}/>
-            <TextInput 
-              style={styles.textInput} 
-              placeholder='Username' 
-              placeholderTextColor={'pink'} 
-              value={user} 
-              onChangeText={setUser}
-            />
-          </View>
-          <View style={[{width: '48%'},styles.input]}>
-            <Icon name='lock' size={30} color={'pink'}/>
-            <TextInput 
-              style={styles.textInput} 
-              placeholder='Password' 
-              secureTextEntry 
-              placeholderTextColor={'pink'} 
-              value={pass} 
-              onChangeText={setPass}
-            />
-          </View>
-        </View>
-        <View style={styles.viewInput}>
-          <View style={[{width: '100%'},styles.input]}>
-            <AntDesign name="user" size={20} color="pink" />
-            <TextInput 
-              style={styles.textInput} 
-              placeholder='Your name' 
-              placeholderTextColor={'pink'} 
-              value={name} 
-              onChangeText={setName}
-            />
-          </View>
-          
-        </View>
+                console.log(newFileName);
 
-        <View style={styles.viewInput}>
-          <View style={[{width: '100%'},styles.input]}>
-            <Fontisto name="email" size={24} color="pink" />
-            <TextInput 
-              style={styles.textInput} 
-              placeholder='Your email' 
-              placeholderTextColor={'pink'} 
-              value={email} 
-              onChangeText={setEmail}
-            />
-            <TextInput 
-              style={styles.textInput} 
-              placeholder='Your email' 
-              placeholderTextColor={'pink'} 
-              value='@gmail.com' 
-              editable={false}
-            />
-          </View>
-          
-        </View>
+                setImageUri(result.assets[0].uri);
+                setImageFile({
+                    uri: result.assets[0].uri,
+                    type: "image/png", // Đảm bảo đúng loại ảnh
+                    name: newFileName, // Đổi tên tệp
+                });
+            }
+        }
+    };
 
-        <View style={styles.viewInput}>
-          <View style={[{width: '100%'},styles.input]}>
-            <AntDesign name="phone" size={20} color="pink" />
-            <TextInput 
-              style={styles.textInput} 
-              placeholder='Your Phone' 
-              placeholderTextColor={'pink'} 
-              value={sdt} 
-              onChangeText={setSdt}
-            />
-          </View>
-          
-        </View>
+    // Xử lý ngày sinh
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    };
 
-          <TouchableOpacity style={styles.Touch} onPress={InsertUser}>
-            <Text style={{fontSize: 24, fontWeight: 'bold', color: 'white'}}>Register</Text>
-          </TouchableOpacity>
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+    };
 
-          <View style={styles.hr}/>
-     
-          <TouchableOpacity style={{alignItems: 'flex-start', flexDirection: 'row', paddingHorizontal: 20, width: '100%'}} onPress={()=> navigation.navigate('Login')}>
-          <AntDesign name="arrowleft" size={16} color="white" style={{alignSelf: 'center', paddingHorizontal: 10}}/>
-            <Text style={{fontSize: 13, color: 'white'}}>Login</Text>
+    const handleConfirm = (date) => {
+        setBirthday(date);
+        hideDatePicker();
+    };
 
-          </TouchableOpacity>
-         
-          {/* <Text style={{fontSize: 11, color: 'white', position: 'absolute', bottom: 10, alignSelf: 'center'}}>Cre: PN2D2101</Text> */}
-      </View>
-    </ImageBackground>
-  );
-}
+    // Hàm đăng ký người dùng
+    const addUser = async () => {
+        const formData = new FormData();
+        formData.append("username", username);
+        formData.append("password", password);
+        formData.append("email", email);
+        formData.append("birthday", birthday.toISOString());
+        formData.append("avatar", imageFile);
+
+        try {
+            const response = await axios.post(
+                "http://192.168.1.124:3000/register",
+                formData,
+                {
+                    headers: { "Content-Type": "multipart/form-data" },
+                }
+            );
+            Alert.alert("Thông báo", "Đăng ký thành công!");
+            navigation.navigate("Login");
+        } catch (error) {
+            Alert.alert(
+                "Lỗi",
+                "Có lỗi xảy ra khi đăng ký: " +
+                    (error.response?.data?.message || error.message)
+            );
+        }
+    };
+
+    // Kiểm tra thông tin đăng ký
+    const handleRegister = () => {
+        if (!username || !password || !retryPassword || !email || !birthday) {
+            Alert.alert("Lỗi", "Vui lòng điền đầy đủ thông tin.");
+            return;
+        }
+        if (password !== retryPassword) {
+            Alert.alert("Lỗi", "Mật khẩu xác nhận không khớp.");
+            return;
+        }
+        addUser();
+    };
+
+    return (
+        <SafeAreaView style={styles.container}>
+            <View style={styles.inputContainer}>
+                <Text style={styles.label}>Username</Text>
+                <TextInput
+                    placeholder="Nhap ten cua ban"
+                    placeholderTextColor="#aaa"
+                    style={styles.input}
+                    value={username}
+                    onChangeText={(text) => setUsername(text)}
+                />
+            </View>
+
+            <View style={styles.inputContainer}>
+                <Text style={styles.label}>Password</Text>
+                <TextInput
+                    placeholder="Nhập mật khẩu"
+                    placeholderTextColor="#aaa"
+                    style={styles.input}
+                    secureTextEntry
+                    value={password}
+                    onChangeText={(text) => setPassword(text)}
+                />
+            </View>
+
+            <View style={styles.inputContainer}>
+                <Text style={styles.label}>Confirm Password</Text>
+                <TextInput
+                    placeholder="Xác nhận mật khẩu"
+                    placeholderTextColor="#aaa"
+                    style={styles.input}
+                    secureTextEntry
+                    value={retryPassword}
+                    onChangeText={(text) => setRetryPassword(text)}
+                />
+            </View>
+
+            <View style={styles.inputContainer}>
+                <Text style={styles.label}>Email</Text>
+                <TextInput
+                    placeholder="Nhập email"
+                    placeholderTextColor="#aaa"
+                    style={styles.input}
+                    keyboardType="email-address"
+                    value={email}
+                    onChangeText={(text) => setEmail(text)}
+                />
+            </View>
+
+            <View style={styles.inputContainer}>
+                <Text style={styles.label}>Birthday</Text>
+                <TouchableOpacity onPress={showDatePicker} style={styles.input}>
+                    <Text style={{ color: birthday ? "#000" : "#aaa" }}>
+                        {birthday
+                            ? birthday.toLocaleDateString()
+                            : "Chọn ngày sinh"}
+                    </Text>
+                </TouchableOpacity>
+                <DateTimePickerModal
+                    isVisible={isDatePickerVisible}
+                    mode="date"
+                    onConfirm={handleConfirm}
+                    onCancel={hideDatePicker}
+                />
+            </View>
+
+            <TouchableOpacity
+                style={styles.imagePickerButton}
+                onPress={handleImagePicker}
+            >
+                {imageUri ? (
+                    <Image
+                        source={{ uri: imageUri }}
+                        style={styles.previewImage}
+                    />
+                ) : (
+                    <MaterialIcons
+                        name="account-circle"
+                        size={100}
+                        color="#ccc"
+                    />
+                )}
+                <Text style={styles.imagePickerText}>Chọn ảnh đại diện</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                style={styles.btnRegister}
+                onPress={handleRegister}
+            >
+                <Text style={styles.btnRegisterText}>Đăng ký</Text>
+            </TouchableOpacity>
+        </SafeAreaView>
+    );
+};
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  overlay: {
-    flex: 1,
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    padding: 10, 
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    borderRadius: 10,
-  },
-  logo: {
-    padding: 20,
-  },
-  viewInput: {
-    padding: 10,
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  input: {
-    borderColor: 'pink',
-    borderWidth: .3,
-    borderRadius: 15,
-    padding: 10,
-    flexDirection: 'row',
-    color: 'pink',
-  },
-  textInput: {
-    marginLeft: 10,
-    flex: 1,
-    paddingHorizontal: 10,
-    color: 'pink',
-  },
-  Touch: {
-    padding: 20,
-    backgroundColor: 'pink',
-    alignItems: 'center',
-    marginTop: 30,
-    borderRadius: 15,
-    width: '100%',
-    marginHorizontal: 20
-  },
-  hr: {
-    width: '100%',
-    height: 1,
-    backgroundColor: 'pink',
-    marginVertical: 20,
-  },
+    container: {
+        flex: 1,
+        backgroundColor: "#f7f7f7",
+        padding: 20,
+        justifyContent: "center",
+    },
+    inputContainer: {
+        marginVertical: 10,
+    },
+    label: {
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "#333",
+        marginBottom: 5,
+    },
+    input: {
+        backgroundColor: "#fff",
+        padding: 15,
+        borderRadius: 10,
+        borderColor: "#ddd",
+        borderWidth: 1,
+    },
+    imagePickerButton: {
+        alignItems: "center",
+        marginVertical: 20,
+    },
+    imagePickerText: {
+        color: "#007AFF",
+        fontSize: 16,
+        fontWeight: "bold",
+        marginTop: 10,
+    },
+    previewImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 50,
+    },
+    btnRegister: {
+        backgroundColor: "#007AFF",
+        paddingVertical: 15,
+        borderRadius: 10,
+        alignItems: "center",
+        marginTop: 20,
+    },
+    btnRegisterText: {
+        color: "#fff",
+        fontSize: 18,
+        fontWeight: "bold",
+    },
 });
