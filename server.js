@@ -189,7 +189,7 @@ app.get("/profile-images", async (req, res) => {
 app.get("/video-watching", async (req, res) => {
     try {
         const sql = `
-        SELECT p.id, p.type, p.url,p.content, p.upload_at, u.id as user_id,  u.user_name, u.avatar FROM posts p
+        SELECT p.id, p.type, p.url,p.content, p.upload_at, p.thumbnail, u.id as user_id,  u.user_name, u.avatar FROM posts p
         JOIN users u ON p.user_id = u.id
         where p.type = 'video'
         ORDER BY p.id DESC
@@ -763,6 +763,22 @@ app.get("/my-follow", async (req, res) => {
         });
     } catch (err) {
         console.log("Error fetching follow counts:", err);
+        res.status(500).send("Server Error");
+    }
+});
+
+app.get("/thumbnail-video", async (req, res) => {
+    try {
+        const sql = `SELECT p.id, p.thumbnail FROM posts p WHERE type = 'video' order by p.id desc`;
+        db.query(sql, (err, results) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ message: "Lỗi server" });
+            }
+            res.status(200).json(results);
+        });
+    } catch (err) {
+        console.log("Error fetching thumbnail counts:", err);
         res.status(500).send("Server Error");
     }
 });
