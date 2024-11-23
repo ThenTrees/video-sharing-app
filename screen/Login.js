@@ -8,10 +8,19 @@ import {
     Alert,
 } from "react-native";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default LoginScreen = ({ navigation }) => {
-    const [email, setEmail] = useState("t@gmail.com");
+    const [email, setEmail] = useState("t1@gmail.com");
     const [password, setPassword] = useState("a");
+
+    const saveSession = async (myInfo) => {
+        try {
+            await AsyncStorage.setItem("userToken", JSON.stringify(myInfo));
+        } catch (e) {
+            console.error("Failed to save the token to storage:", e);
+        }
+    };
 
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -31,19 +40,17 @@ export default LoginScreen = ({ navigation }) => {
 
         try {
             const response = await axios.post(
-                "http://192.168.1.124:3000/login",
+                "http://192.168.1.198:3000/login",
                 {
                     email,
                     password,
                 }
             );
             if (response.status === 200 && response.data.user) {
-                Alert.alert("Thành công", "Đăng nhập thành công!");
                 setEmail("");
                 setPassword("");
-                navigation.navigate("VideoSharingApp", {
-                    userData: response.data.user,
-                });
+                saveSession(response.data.user);
+                navigation.navigate("VideoSharingApp");
             }
         } catch (error) {
             Alert.alert(

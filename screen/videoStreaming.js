@@ -36,7 +36,7 @@ export default function VideoStreaming({ navigation, route }) {
     const fetchData = async () => {
         try {
             const response = await axios.get(
-                `http://192.168.1.124:3000/video-watching`
+                `http://192.168.1.198:3000/video-watching`
             );
             if (Array.isArray(response.data) && response.data.length > 0) {
                 setVideos(response.data);
@@ -46,7 +46,7 @@ export default function VideoStreaming({ navigation, route }) {
                 const likeStatuses = {};
                 for (const video of response.data) {
                     const res = await axios.get(
-                        "http://192.168.1.124:3000/is-like",
+                        "http://192.168.1.198:3000/is-like",
                         {
                             params: {
                                 post_id: video.id,
@@ -99,8 +99,8 @@ export default function VideoStreaming({ navigation, route }) {
         try {
             const isCurrentlyLiked = likedPosts[post_id];
             const url = isCurrentlyLiked
-                ? `http://192.168.1.124:3000/unlike`
-                : `http://192.168.1.124:3000/like`;
+                ? `http://192.168.1.198:3000/unlike`
+                : `http://192.168.1.198:3000/like`;
 
             const response = await axios.post(url, {
                 user_id: user.id,
@@ -150,7 +150,7 @@ export default function VideoStreaming({ navigation, route }) {
     const checkIsLike = async (post_id, user_id) => {
         try {
             const response = await axios.get(
-                "http://192.168.1.124:3000/is-like",
+                "http://192.168.1.198:3000/is-like",
                 {
                     params: { post_id, user_id },
                 }
@@ -170,9 +170,9 @@ export default function VideoStreaming({ navigation, route }) {
     const updateCurrentVideoData = async (idPost) => {
         try {
             const [likeResponse, commentResponse] = await Promise.all([
-                axios.get(`http://192.168.1.124:3000/like-count?id=${idPost}`),
+                axios.get(`http://192.168.1.198:3000/like-count?id=${idPost}`),
                 axios.get(
-                    `http://192.168.1.124:3000/comment-count?id=${idPost}`
+                    `http://192.168.1.198:3000/comment-count?id=${idPost}`
                 ),
             ]);
 
@@ -284,7 +284,7 @@ export default function VideoStreaming({ navigation, route }) {
     const fetchComments = async (post_id) => {
         try {
             const response = await axios.get(
-                `http://192.168.1.124:3000/comments?id=${post_id}`
+                `http://192.168.1.198:3000/comments?id=${post_id}`
             );
             if (response.status === 200) {
                 setComments(response.data);
@@ -307,7 +307,7 @@ export default function VideoStreaming({ navigation, route }) {
     const insertComment = async (idUser, idPost, text) => {
         try {
             const response = await axios.post(
-                "http://192.168.1.124:3000/insert-comment",
+                "http://192.168.1.198:3000/insert-comment",
                 {
                     idUser,
                     idPost,
@@ -434,13 +434,13 @@ export default function VideoStreaming({ navigation, route }) {
                                             }}
                                         >
                                             <Image
-                                                source={{
-                                                    uri: `http://192.168.1.124:3000/uploads/${item.avatar}`,
-                                                }}
+                                                source={{ uri: item.avatar }}
                                                 style={{
                                                     height: 50,
                                                     width: 50,
                                                     borderRadius: 50,
+                                                    borderWidth: 1,
+                                                    borderColor: "pink",
                                                 }}
                                             />
                                         </TouchableOpacity>
@@ -490,8 +490,8 @@ const styles = StyleSheet.create({
     },
     backButton: {
         position: "absolute",
-        top: 70,
-        left: 20,
+        top: 80,
+        left: 10,
         zIndex: 11,
     },
     videoContainer: {

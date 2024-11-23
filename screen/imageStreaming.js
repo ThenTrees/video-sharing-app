@@ -1,38 +1,74 @@
-import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, TouchableOpacity, FlatList, Text, Modal, TextInput } from 'react-native';
-import EvilIcons from '@expo/vector-icons/EvilIcons';
-import axios from 'axios';
-import Icon2 from 'react-native-vector-icons/FontAwesome';
-import Icon3 from 'react-native-vector-icons/EvilIcons';
-const ImageViewScreen = ({navigation, route}) => {
-    const my  = route.params.userData;
+import React, { useState, useEffect } from "react";
+import {
+    View,
+    Image,
+    StyleSheet,
+    TouchableOpacity,
+    FlatList,
+    Text,
+    Modal,
+    TextInput,
+} from "react-native";
+import EvilIcons from "@expo/vector-icons/EvilIcons";
+import axios from "axios";
+import Icon2 from "react-native-vector-icons/FontAwesome";
+import Icon3 from "react-native-vector-icons/EvilIcons";
+const ImageViewScreen = ({ navigation, route }) => {
+    const my = route.params.userData;
     const [images, setImages] = useState([]);
     const [likedPosts, setLikedPosts] = useState({});
     const [comments, setComments] = useState([]);
     const [isCommentsVisible, setCommentsVisible] = useState(false);
+
+    const getRelativeTime = (uploadAt) => {
+        const now = new Date();
+        // Lùi lại 7 giờ
+        now.setHours(now.getHours() - 7);
+
+        const uploadedDate = new Date(uploadAt);
+        const diffInSeconds = Math.floor((now - uploadedDate) / 1000);
+
+        if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`;
+        if (diffInSeconds < 3600)
+            return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+        if (diffInSeconds < 86400)
+            return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+        return `${Math.floor(diffInSeconds / 86400)} days ago`;
+    };
+
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://192.168.1.141:3000/imageStreaming');
+            const response = await axios.get(
+                "http://192.168.1.198:3000/image-streaming"
+            );
             if (Array.isArray(response.data) && response.data.length > 0) {
                 setImages(response.data);
             }
         } catch (error) {
-            console.error('Error fetching image data:', error);
+            console.error("Error fetching image data:", error);
         }
     };
 
     const fetchComments = async (idPost) => {
         try {
-            const response = await axios.get(`http://192.168.1.141:3000/comment?id=${idPost}`);
+            const response = await axios.get(
+                `http://192.168.1.198:3000/comments?id=${idPost}`
+            );
             if (response.status === 200) {
                 setComments(response.data);
                 setCommentsVisible(true);
             } else {
-                Alert.alert("Lỗi", "Không thể lấy bình luận. Vui lòng thử lại sau.");
+                Alert.alert(
+                    "Lỗi",
+                    "Không thể lấy bình luận. Vui lòng thử lại sau."
+                );
             }
         } catch (error) {
             console.error("Error fetching comments:", error);
-            Alert.alert("Lỗi", "Đã có lỗi xảy ra trong quá trình lấy bình luận.");
+            Alert.alert(
+                "Lỗi",
+                "Đã có lỗi xảy ra trong quá trình lấy bình luận."
+            );
         }
     };
 
@@ -41,35 +77,55 @@ const ImageViewScreen = ({navigation, route}) => {
     }, []);
 
     const toggleLike = (id) => {
-        setLikedPosts(prev => ({ ...prev, [id]: !prev[id] }));
+        setLikedPosts((prev) => ({ ...prev, [id]: !prev[id] }));
     };
 
     const renderAnh = ({ item }) => (
-        
         <View style={styles.card}>
-            <TouchableOpacity style={{ padding: 10, flexDirection: 'row' }} onPress={() => navigation.navigate('ProfileDetails', { user: item, my: my })}>
-                <Image style={{ height: 30, width: 30, borderRadius: 30 }} source={{ uri: item.avatar }} />
-                <Text style={{ fontWeight: 'bold', alignSelf: 'center', marginLeft: 10 }}>{item.username}</Text>
+            <TouchableOpacity
+                style={{ padding: 10, flexDirection: "row" }}
+                onPress={() =>
+                    navigation.navigate("ProfileDetails", {
+                        user: item,
+                        my: my,
+                    })
+                }
+            >
+                <Image
+                    style={{ height: 30, width: 30, borderRadius: 30 }}
+                    source={{ uri: item.avatar }}
+                />
+                <Text
+                    style={{
+                        fontWeight: "bold",
+                        alignSelf: "center",
+                        marginLeft: 10,
+                    }}
+                >
+                    {item.user_name}
+                </Text>
             </TouchableOpacity>
-            <Image
-                source={{ uri: item.url }}
-                style={styles.image}
-            />
+
+            <Text style={{ padding: 10, fontStyle: "italic" }}>
+                Uploaded {getRelativeTime(item.upload_at)}
+            </Text>
+
+            <Image source={{ uri: item.url }} style={styles.image} />
             <View style={styles.iconContainer}>
-                <TouchableOpacity onPress={() => toggleLike(item.idPost)}>
-                    <EvilIcons name="heart" size={40} color={likedPosts[item.idPost] ? 'red' : 'black'} />
+                <TouchableOpacity onPress={() => toggleLike(item.id)}>
+                    <EvilIcons
+                        name="heart"
+                        size={40}
+                        color={likedPosts[item.id] ? "red" : "black"}
+                    />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=> fetchComments(item.idPost)}>
+                <TouchableOpacity onPress={() => fetchComments(item.id)}>
                     <EvilIcons name="comment" size={40} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <EvilIcons name="share-apple" size={40} color="black" />
                 </TouchableOpacity>
             </View>
             <View style={{ padding: 10 }}>
-                <Text><Text style={{ fontWeight: 'bold' }}>{item.username}</Text> : {item.content}</Text>
+                <Text style={{ fontWeight: "bold" }}>{item.content}</Text>
             </View>
-
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -80,33 +136,82 @@ const ImageViewScreen = ({navigation, route}) => {
                     <View style={styles.modalContent}>
                         <Text style={styles.modalTitle}>Bình luận</Text>
                         <TouchableOpacity>
-                            <Icon3 style={styles.close} name='close' size={30} color='black' onPress={() => setCommentsVisible(false)} />
+                            <Icon3
+                                style={styles.close}
+                                name="close"
+                                size={30}
+                                color="black"
+                                onPress={() => setCommentsVisible(false)}
+                            />
                         </TouchableOpacity>
                         <FlatList
                             data={comments}
-                            keyExtractor={comment => comment.idComment}
+                            keyExtractor={(comment) => comment.id}
                             renderItem={({ item }) => (
-                                <View style={{ flexDirection: 'row', padding: 5, alignItems: 'center', flex: 1, justifyContent: 'space-between' }}>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <Image source={{ uri: item.avatar }} style={{ height: 50, width: 50, borderRadius: 50 }} />
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        padding: 5,
+                                        alignItems: "center",
+                                        flex: 1,
+                                        justifyContent: "space-between",
+                                    }}
+                                >
+                                    <View
+                                        style={{
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                        }}
+                                    >
+                                        <Image
+                                            source={`http://192.168.1.198:3000/uploads/${item.avatar}`}
+                                            style={{
+                                                height: 50,
+                                                width: 50,
+                                                borderRadius: 50,
+                                            }}
+                                        />
                                         <View style={{ paddingLeft: 10 }}>
-                                            <Text style={[styles.commentText, { fontWeight: 'bold' }]}>{item.username}</Text>
-                                            <Text style={{ fontSize: 11, color: 'gray', marginTop: -8, marginBottom: 5 }}>{item.time}</Text>
-                                            <Text style={styles.commentText}>{item.text}</Text>
+                                            <Text
+                                                style={[
+                                                    styles.commentText,
+                                                    { fontWeight: "bold" },
+                                                ]}
+                                            >
+                                                {item.user_name}
+                                            </Text>
+                                            <Text
+                                                style={{
+                                                    fontSize: 11,
+                                                    color: "gray",
+                                                    marginTop: -8,
+                                                    marginBottom: 5,
+                                                }}
+                                            >
+                                                {item.time}
+                                            </Text>
+                                            <Text style={styles.commentText}>
+                                                {item.text}
+                                            </Text>
                                         </View>
                                     </View>
                                     <Icon2
-                                        name='heart-o'
+                                        name="heart-o"
                                         size={20}
-                                        color='gray'
+                                        color="gray"
                                     />
                                 </View>
                             )}
                         />
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                            }}
+                        >
                             <TextInput
                                 style={styles.input}
-                                placeholder='Thêm bình luận...'
+                                placeholder="Thêm bình luận..."
                                 placeholderTextColor="#888"
                             />
                             <Icon2 name="paper-plane" size={20} color="pink" />
@@ -114,7 +219,6 @@ const ImageViewScreen = ({navigation, route}) => {
                     </View>
                 </View>
             </Modal>
-
         </View>
     );
 
@@ -122,12 +226,11 @@ const ImageViewScreen = ({navigation, route}) => {
         <FlatList
             data={images}
             renderItem={renderAnh}
-            keyExtractor={(item) => item.idPost}
+            keyExtractor={(item) => item.id}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ marginTop: 10 }}
             showsVerticalScrollIndicator={false}
         />
-        
     ) : (
         <View style={styles.container}>
             <Text>No images available</Text>
@@ -138,70 +241,71 @@ const ImageViewScreen = ({navigation, route}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff',
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#fff",
         paddingHorizontal: 10,
     },
     card: {
         padding: 10,
-        backgroundColor: '#f0f0f0',
+        backgroundColor: "#f0f0f0",
         borderRadius: 10,
         marginBottom: 15,
-        shadowColor: '#000',
+        shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 5,
-        height: 'auto'
+        height: "auto",
     },
     image: {
-        width: '100%',
+        width: "100%",
         height: 500,
-        resizeMode: 'contain',
+        resizeMode: "contain",
         borderRadius: 20,
     },
     iconContainer: {
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
+        flexDirection: "row",
+        justifyContent: "flex-start",
         marginTop: 10,
-    },modalContainer: {
+    },
+    modalContainer: {
         flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        position: 'relative'
-      },
-      modalContent: {
-        backgroundColor: 'white',
+        backgroundColor: "rgba(0,0,0,0.5)",
+        position: "relative",
+    },
+    modalContent: {
+        backgroundColor: "white",
         padding: 20,
         borderRadius: 10,
-        width: '100%',
-        height: '60%',
-        position: 'absolute',
+        width: "100%",
+        height: "60%",
+        position: "absolute",
         bottom: 0,
-        zIndex: 1
-      },
-      modalTitle: {
+        zIndex: 1,
+    },
+    modalTitle: {
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: "bold",
         marginBottom: 10,
-      },
-      commentText: {
+    },
+    commentText: {
         fontSize: 16,
         marginBottom: 5,
-      },
-      input: {
+    },
+    input: {
         height: 40,
-        paddingHorizontal: 8, 
+        paddingHorizontal: 8,
         flex: 1,
-        backgroundColor: '#eee',
+        backgroundColor: "#eee",
         borderRadius: 10,
         marginBottom: 10,
-        marginRight: 10
-      },
-      close : {
-        position: 'absolute', 
+        marginRight: 10,
+    },
+    close: {
+        position: "absolute",
         right: 0,
-        top: -40
-      }
+        top: -40,
+    },
 });
 
 export default ImageViewScreen;

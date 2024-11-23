@@ -22,44 +22,28 @@ export default RegisterScreen = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [birthday, setBirthday] = useState(null);
     const [imageUri, setImageUri] = useState(null);
-    const [imageFile, setImageFile] = useState(null);
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-    // Xử lý việc chọn ảnh từ thư viện
-    const handleImagePicker = async () => {
-        if (Platform.OS === "web") {
-            const input = document.createElement("input");
-            input.type = "file";
-            input.accept = "image/*";
-            input.onchange = (event) => {
-                const file = event.target.files[0];
-                if (file) {
-                    setImageUri(URL.createObjectURL(file));
-                    setImageFile(file);
-                }
-            };
-            input.click();
-        } else {
-            const result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: true,
-                aspect: [4, 3],
-                quality: 1,
-            });
+    const handleSelectImage = async () => {
+        const { status } =
+            await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+            Alert.alert(
+                "Permission Denied",
+                "Permission to access the media library is required!"
+            );
+            return;
+        }
 
-            if (!result.canceled) {
-                const fileExtension = result.assets[0].uri.split(".").pop(); // Lấy phần mở rộng của file
-                const newFileName = `newFile.${fileExtension}`; // Tạo tên tệp mới
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
 
-                console.log(newFileName);
-
-                setImageUri(result.assets[0].uri);
-                setImageFile({
-                    uri: result.assets[0].uri,
-                    type: "image/png", // Đảm bảo đúng loại ảnh
-                    name: newFileName, // Đổi tên tệp
-                });
-            }
+        if (!result.canceled) {
+            setImageUri(result.assets[0].uri);
         }
     };
 
@@ -84,11 +68,11 @@ export default RegisterScreen = ({ navigation }) => {
         formData.append("password", password);
         formData.append("email", email);
         formData.append("birthday", birthday.toISOString());
-        formData.append("avatar", imageFile);
+        formData.append("avatar", imageUri);
 
         try {
             const response = await axios.post(
-                "http://192.168.1.124:3000/register",
+                "http://192.168.1.198:3000/register",
                 formData,
                 {
                     headers: { "Content-Type": "multipart/form-data" },
@@ -186,7 +170,7 @@ export default RegisterScreen = ({ navigation }) => {
 
             <TouchableOpacity
                 style={styles.imagePickerButton}
-                onPress={handleImagePicker}
+                onPress={handleSelectImage}
             >
                 {imageUri ? (
                     <Image
