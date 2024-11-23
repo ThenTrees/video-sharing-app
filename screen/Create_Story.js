@@ -167,7 +167,11 @@ export default MediaPickerExample = ({ navigation, route }) => {
 
     const confirmMedia = () => {
         if (media) {
-            navigation.navigate("PostStory", { media, mediaType, userData });
+            navigation.navigate("PostStory", {
+                media,
+                mediaType,
+                user: userData,
+            });
         } else {
             Alert.alert("Lỗi", "Không có phương tiện nào để xác nhận!");
         }

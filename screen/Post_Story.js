@@ -13,16 +13,16 @@ import { Video } from "expo-av";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 
-const Post_Video_Screen = ({ navigation, route }) => {
+export default Post_Video_Screen = ({ navigation, route }) => {
     const { media, mediaType, user } = route.params;
     const [content, setContent] = useState("");
 
-    const postMedia = async (idUser, type, url, navigation) => {
+    const postMedia = async (userId, type, url, navigation) => {
         try {
             const response = await axios.post(
                 "http://192.168.1.198:3000/save-post",
                 {
-                    idUser,
+                    userId,
                     type,
                     url,
                     content,
@@ -240,5 +240,3 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
 });
-
-export default Post_Video_Screen;
