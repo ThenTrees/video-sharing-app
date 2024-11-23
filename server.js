@@ -143,7 +143,7 @@ app.get("/profile-videos", async (req, res) => {
             .json({ error: "Invalid ID parameter. Must be a number." });
     }
     try {
-        const sql = `SELECT p.url, p.id as pid, u.id as uid, u.avatar FROM posts p JOIN users u
+        const sql = `SELECT p.url,p.thumbnail, p.id as pid, u.id as uid, u.avatar FROM posts p JOIN users u
                     ON p.user_id = u.id WHERE p.type= 'video' AND p.user_id = ?
       `;
 
@@ -625,18 +625,17 @@ app.get("/stories", async (req, res) => {
 
 app.get("/user-stories", async (req, res) => {
     try {
-        const sql = `SELECT u.id, u.avatar, u.user_name, MAX(p.upload_at) AS latest_upload_at
-                    FROM posts p JOIN users u ON p.user_id = u.id
-                    WHERE p.type = 'story' AND TIMESTAMPDIFF(HOUR, p.upload_at, NOW()) <= 24
-                    GROUP BY u.id, u.avatar, u.user_name
-                    ORDER BY latest_upload_at DESC;
+        const sql = `SELECT p.id,p.content,p.url, u.id as user_id, u.avatar, u.user_name, MAX(p.upload_at) AS latest_upload_at
+FROM posts p JOIN users u ON p.user_id = u.id
+WHERE p.type = 'story' AND TIMESTAMPDIFF(HOUR, p.upload_at, NOW()) <= 24
+GROUP BY user_id, p.id
+ORDER BY latest_upload_at DESC;
 `;
         db.query(sql, (err, results) => {
             if (err) {
                 console.error(err);
                 return res.status(500).json({ message: "Lỗi server" });
             }
-
             res.status(200).json(results);
         });
     } catch (err) {
@@ -771,6 +770,23 @@ app.get("/thumbnail-video", async (req, res) => {
     try {
         const sql = `SELECT p.id, p.thumbnail FROM posts p WHERE type = 'video' order by p.id desc`;
         db.query(sql, (err, results) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ message: "Lỗi server" });
+            }
+            res.status(200).json(results);
+        });
+    } catch (err) {
+        console.log("Error fetching thumbnail counts:", err);
+        res.status(500).send("Server Error");
+    }
+});
+
+app.get("/stories-of-user", async (req, res) => {
+    const id = req.query.id;
+    try {
+        const sql = `SELECT p.id, p.type, p.url,p.content, p.upload_at, u.id as user_id,  u.user_name, u.avatar FROM posts p join users u on p.user_id = u.id where p.type = 'story' and u.id = ?`;
+        db.query(sql, [id], (err, results) => {
             if (err) {
                 console.error(err);
                 return res.status(500).json({ message: "Lỗi server" });
