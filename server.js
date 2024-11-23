@@ -724,7 +724,6 @@ app.post("/register", upload.single("avatar"), async (req, res) => {
 
 app.post("/follow", async (req, res) => {
     const { idFollowing, idFollowed } = req.body;
-    console.log(`id following: ${idFollowing}, id followed: ${idFollowed}`);
     try {
         const sql = `
               INSERT INTO follows (id_following, id_followed)
@@ -738,7 +737,6 @@ app.post("/follow", async (req, res) => {
                     error: "Lỗi khi theo dõi người dùng.",
                 });
             }
-
             res.status(201).json({
                 message: "Đã theo dõi người dùng thành công",
             });

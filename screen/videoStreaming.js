@@ -61,8 +61,8 @@ export default VideoStreaming = ({ navigation, route }) => {
         }
     };
 
-    useEffect(async () => {
-        await fetchData();
+    useEffect(() => {
+        fetchData();
     }, []);
 
     useEffect(() => {
@@ -198,7 +198,7 @@ export default VideoStreaming = ({ navigation, route }) => {
             <View style={styles.boxIcon}>
                 <TouchableOpacity
                     onPress={() =>
-                        navigation.navigate("ProfileDetailsScreen", {
+                        navigation.navigate("ProfileDetails", {
                             user: item,
                             my: my,
                         })
@@ -425,7 +425,7 @@ export default VideoStreaming = ({ navigation, route }) => {
                                             onPress={() => {
                                                 setCommentsVisible(false);
                                                 navigation.navigate(
-                                                    "ProfileDetailsScreen",
+                                                    "ProfileDetails",
                                                     { user: item, my: my }
                                                 );
                                             }}

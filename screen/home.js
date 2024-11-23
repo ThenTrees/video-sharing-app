@@ -106,7 +106,7 @@ export default HomeScreen = ({ navigation }) => {
         fetchStories();
         loadDataVideos();
         fetchData();
-    });
+    }, []);
 
     // Hàm renderItem cho phần Stories
     const renderItem1 = ({ item }) => {

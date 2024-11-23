@@ -17,12 +17,13 @@ export default Post_Video_Screen = ({ navigation, route }) => {
     const { media, mediaType, user } = route.params;
     const [content, setContent] = useState("");
     const [thumbnail, setThumbnail] = useState(null);
-    const extractThumbnail = async (videoUri) => {
+
+    const extractThumbnail = async (videoUri, mediaType) => {
         try {
+            if (mediaType !== "video") return;
             const { uri } = await VideoThumbnails.getThumbnailAsync(videoUri, {
                 time: 1000, // Thời điểm lấy thumbnail (mili giây)
             });
-            console.log("Thumbnail URI:", uri);
             setThumbnail(uri);
         } catch (error) {
             console.error("Error generating thumbnail:", error);
@@ -31,10 +32,9 @@ export default Post_Video_Screen = ({ navigation, route }) => {
     };
 
     useEffect(() => {
-        extractThumbnail(media);
+        extractThumbnail(media, mediaType);
     }, []);
 
-    
     const postMedia = async (userId, type, url, navigation) => {
         try {
             const response = await axios.post(
