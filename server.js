@@ -353,8 +353,6 @@ app.get("/comment-count", async (req, res) => {
 app.post("/save-post", async (req, res) => {
     const { userId, type, url, content, thumbnail } = req.body;
 
-    console.log({ userId, type, url, content, thumbnail });
-
     if (!userId || !type || !url || !content) {
         return res
             .status(400)
@@ -469,10 +467,6 @@ app.post("/insert-comment", async (req, res) => {
 app.get("/is-following", async (req, res) => {
     const { id_following, id_followed } = req.query;
 
-    console.log(
-        `id_following: ${id_following}, id_followed: ${id_followed} is-following`
-    );
-
     // Kiểm tra đầu vào
     if (!id_following || !id_followed) {
         return res
@@ -506,8 +500,9 @@ app.get("/is-following", async (req, res) => {
 });
 
 // Endpoint để hủy theo dõi người dùng
-app.delete("/unfollow", async (req, res) => {
+app.post("/un-follow", async (req, res) => {
     const { idFollowing, idFollowed } = req.body;
+
     const sql = `
           DELETE FROM follows
           WHERE id_following = ? AND id_followed = ?
@@ -724,6 +719,7 @@ app.post("/register", upload.single("avatar"), async (req, res) => {
 
 app.post("/follow", async (req, res) => {
     const { idFollowing, idFollowed } = req.body;
+
     try {
         const sql = `
               INSERT INTO follows (id_following, id_followed)
