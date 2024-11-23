@@ -28,7 +28,7 @@ export default MediaPickerExample = ({ navigation, route }) => {
             if (data) {
                 setUserData(data);
             } else {
-                Alert.alert("Error", "Please login first");
+                
                 navigation.navigate("Login");
             }
         } catch (e) {
@@ -38,7 +38,7 @@ export default MediaPickerExample = ({ navigation, route }) => {
 
     useEffect(() => {
         loadUserInfo();
-    });
+    }, []);
 
     const filterOptions = [
         {

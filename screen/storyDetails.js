@@ -12,17 +12,17 @@ import { Video } from "expo-av";
 import axios from "axios";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
-export default function VideoStreaming({ navigation }) {
+export default VideoStreaming = ({ navigation, route }) => {
     const { height, width } = useWindowDimensions();
     const [stories, setStories] = useState([]);
     const [activeStoryIndex, setActiveStoryIndex] = useState(0);
     const videoRefs = useRef([]);
-
+    const user = route.params.user;
     // Fetch stories từ API
     const fetchStories = async () => {
         try {
             const response = await axios.get(
-                "http://192.168.1.198:3000/stories"
+                `http://192.168.1.198:3000/stories-of-user?id=${user.user_id}`
             );
             setStories(response.data);
         } catch (error) {
@@ -34,25 +34,21 @@ export default function VideoStreaming({ navigation }) {
         fetchStories();
     }, []);
 
-    const handlePlayPause = () => {
-        videoRefs.current.forEach((video, index) => {
-            if (video) {
-                if (index === activeStoryIndex) {
-                    video.playAsync();
-                } else {
+    const handlePlayPause = (index) => {
+        const video = videoRefs.current[index];
+        if (video) {
+            video.getStatusAsync().then((status) => {
+                if (status.isPlaying) {
                     video.pauseAsync();
+                } else {
+                    video.playAsync();
                 }
-            }
-        });
+            });
+        }
     };
 
-    useEffect(() => {
-        handlePlayPause();
-    }, [activeStoryIndex]);
-
     const renderStory = ({ item, index }) => {
-        const isVideo = item.type === "video" || item.url.endsWith(".mp4");
-
+        const isVideo = item.url.endsWith(".mp4");
         return (
             <View style={[styles.storyContainer, { width }]}>
                 <TouchableOpacity
@@ -74,7 +70,11 @@ export default function VideoStreaming({ navigation }) {
                             marginHorizontal: 10,
                         }}
                         resizeMode="contain"
-                        source={{ uri: item.avatar }}
+                        source={{
+                            uri:
+                                item.avatar ||
+                                "https://static.vecteezy.com/system/resources/previews/018/765/757/original/user-profile-icon-in-flat-style-member-avatar-illustration-on-isolated-background-human-permission-sign-business-concept-vector.jpg",
+                        }}
                     />
                     <Text
                         style={{
@@ -83,7 +83,7 @@ export default function VideoStreaming({ navigation }) {
                             fontSize: 18,
                         }}
                     >
-                        {item.username}
+                        {item.user_name}
                     </Text>
                 </TouchableOpacity>
 
@@ -130,7 +130,7 @@ export default function VideoStreaming({ navigation }) {
             />
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {

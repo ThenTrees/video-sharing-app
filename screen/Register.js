@@ -83,8 +83,7 @@ export default RegisterScreen = ({ navigation }) => {
         } catch (error) {
             Alert.alert(
                 "Lỗi",
-                "Có lỗi xảy ra khi đăng ký: " +
-                    (error.response?.data?.message || error.message)
+                "Có lỗi xảy ra khi đăng ký: " + error.response.data.message
             );
         }
     };

@@ -52,7 +52,6 @@ export default HomeScreen = ({ navigation }) => {
             if (data) {
                 setUserData(data);
             } else {
-                Alert.alert("Error", "Please login first");
                 navigation.navigate("Login");
             }
         } catch (e) {
@@ -88,19 +87,26 @@ export default HomeScreen = ({ navigation }) => {
             const response = await axios.get(
                 "http://192.168.1.198:3000/user-stories"
             );
-            setStory(response.data);
+
+            setStory(
+                response.data.filter(
+                    (item, index, self) =>
+                        index ===
+                        self.findIndex((t) => t.user_id === item.user_id)
+                )
+            );
         } catch (error) {
             console.error("Error fetching stories:", error);
             Alert.alert("Lỗi", "Không thể lấy danh sách story");
         }
     };
 
-    useEffect(async () => {
-        await loadUserInfo();
-        await fetchStories();
-        await loadDataVideos();
-        await fetchData();
-    }, []);
+    useEffect(() => {
+        loadUserInfo();
+        fetchStories();
+        loadDataVideos();
+        fetchData();
+    });
 
     // Hàm renderItem cho phần Stories
     const renderItem1 = ({ item }) => {
@@ -113,9 +119,9 @@ export default HomeScreen = ({ navigation }) => {
         return (
             <TouchableOpacity
                 style={styles.padTouch}
-                onPress={() =>
-                    navigation.navigate("StoryDetails", { userData: userData })
-                }
+                onPress={() => {
+                    navigation.navigate("StoryDetails", { user: item });
+                }}
             >
                 <Image
                     style={{
@@ -125,7 +131,11 @@ export default HomeScreen = ({ navigation }) => {
                         borderWidth: 3,
                         borderColor: "#0099FF",
                     }}
-                    source={{ uri: item.avatar }}
+                    source={{
+                        uri:
+                            item.avatar ||
+                            "https://static.vecteezy.com/system/resources/previews/018/765/757/original/user-profile-icon-in-flat-style-member-avatar-illustration-on-isolated-background-human-permission-sign-business-concept-vector.jpg",
+                    }}
                 />
                 <Text style={styles.username}>{displayName}</Text>
             </TouchableOpacity>
@@ -212,7 +222,11 @@ export default HomeScreen = ({ navigation }) => {
                             borderWidth: 1,
                             borderColor: "#0099FF",
                         }}
-                        source={{ uri: userData.avatar }}
+                        source={{
+                            uri:
+                                userData.avatar ||
+                                "https://static.vecteezy.com/system/resources/previews/018/765/757/original/user-profile-icon-in-flat-style-member-avatar-illustration-on-isolated-background-human-permission-sign-business-concept-vector.jpg",
+                        }}
                     />
                     <Text>{userData.user_name}</Text>
                 </TouchableOpacity>
@@ -366,7 +380,7 @@ export default HomeScreen = ({ navigation }) => {
                 <FlatList
                     data={dataAudio}
                     renderItem={renderItem2}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item) => item.id.toString()}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{ marginTop: 10 }}

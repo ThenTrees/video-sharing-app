@@ -32,9 +32,9 @@ export default Post_Video_Screen = ({ navigation, route }) => {
 
     useEffect(() => {
         extractThumbnail(media);
-    });
+    }, []);
 
-    useEffect(() => {});
+    
     const postMedia = async (userId, type, url, navigation) => {
         try {
             const response = await axios.post(

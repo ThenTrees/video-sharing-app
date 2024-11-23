@@ -212,7 +212,6 @@ export default ProfileScreen = ({ navigation }) => {
             if (info) {
                 setUserData(info);
             } else {
-                Alert.alert("Error", "Please login first");
                 navigation.navigate("Login");
             }
         } catch (e) {
