@@ -208,11 +208,11 @@ export default ProfileDetails = ({ navigation, route }) => {
     };
     const unfollow = async (idFollowing, idFollowed) => {
         try {
-            const response = await axios.delete(
-                "http://192.168.1.198:3000/unfollow",
+            const response = await axios.post(
+                "http://192.168.1.198:3000/un-follow",
                 {
-                    idFollowing: idFollowing,
-                    idFollowed: idFollowed,
+                    idFollowing,
+                    idFollowed,
                 }
             );
 
@@ -220,12 +220,12 @@ export default ProfileDetails = ({ navigation, route }) => {
                 setIsFollowing(false);
             } else {
                 console.error(
-                    "Lỗi khi thực hiện hủy theo dõi:",
+                    "Lỗi khi thực hiện huy theo dõi:",
                     response.status
                 );
             }
         } catch (error) {
-            console.error("Lỗi khi gọi API hủy theo dõi:", error);
+            console.error("Lỗi khi gọi API huy theo dõi:", error);
         }
     };
 

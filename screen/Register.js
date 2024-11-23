@@ -200,11 +200,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#f7f7f7",
-        padding: 20,
         justifyContent: "center",
+        paddingHorizontal: 20,
     },
     inputContainer: {
-        marginVertical: 10,
+        padding: 10,
     },
     label: {
         fontSize: 16,

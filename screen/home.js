@@ -103,6 +103,9 @@ export default HomeScreen = ({ navigation }) => {
 
     useEffect(() => {
         loadUserInfo();
+    }, []);
+
+    useEffect(() => {
         fetchStories();
         loadDataVideos();
         fetchData();

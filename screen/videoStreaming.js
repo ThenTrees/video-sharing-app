@@ -33,6 +33,22 @@ export default VideoStreaming = ({ navigation, route }) => {
     const user = route.params.userData;
     const my = user;
 
+    const getRelativeTime = (uploadAt) => {
+        const now = new Date();
+        // Lùi lại 7 giờ
+        now.setHours(now.getHours() - 7);
+
+        const uploadedDate = new Date(uploadAt);
+        const diffInSeconds = Math.floor((now - uploadedDate) / 1000);
+
+        if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`;
+        if (diffInSeconds < 3600)
+            return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+        if (diffInSeconds < 86400)
+            return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+        return `${Math.floor(diffInSeconds / 86400)} days ago`;
+    };
+
     const fetchData = async () => {
         try {
             const response = await axios.get(
@@ -443,14 +459,6 @@ export default VideoStreaming = ({ navigation, route }) => {
                                         </TouchableOpacity>
                                         <View style={{ paddingLeft: 10 }}>
                                             <Text
-                                                style={[
-                                                    styles.commentText,
-                                                    { fontWeight: "bold" },
-                                                ]}
-                                            >
-                                                {item.user_name}
-                                            </Text>
-                                            <Text
                                                 style={{
                                                     fontSize: 11,
                                                     color: "gray",
@@ -458,8 +466,17 @@ export default VideoStreaming = ({ navigation, route }) => {
                                                     marginBottom: 5,
                                                 }}
                                             >
-                                                {item.time}
+                                                {getRelativeTime(item.time)}
                                             </Text>
+                                            <Text
+                                                style={[
+                                                    styles.commentText,
+                                                    { fontWeight: "bold" },
+                                                ]}
+                                            >
+                                                {item.user_name}
+                                            </Text>
+
                                             <Text style={styles.commentText}>
                                                 {item.text}
                                             </Text>
