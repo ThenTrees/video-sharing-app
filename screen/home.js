@@ -12,23 +12,7 @@ import {
 import { useState, useEffect } from "react";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const dataTopTrending = [
-    {
-        id: "1",
-        image: require("../assets/Home_Video_Listing/Container3.png"),
-        marginLeft: -10,
-    },
-    {
-        id: "2",
-        image: require("../assets/Home_Video_Listing/Container15.png"),
-        marginLeft: 0,
-    },
-    {
-        id: "3",
-        image: require("../assets/Home_Video_Listing/Container16.png"),
-        marginLeft: 0,
-    },
-];
+
 const dataAudio = [
     {
         id: "1",
@@ -58,6 +42,9 @@ const dataAudio = [
 
 export default HomeScreen = ({ navigation }) => {
     const [userData, setUserData] = useState({});
+    const [videos, setVideos] = useState([]);
+    const [images, setImages] = useState([]);
+    const [stories, setStory] = useState([]);
 
     const loadUserInfo = async () => {
         try {
@@ -73,12 +60,18 @@ export default HomeScreen = ({ navigation }) => {
         }
     };
 
-    useEffect(() => {
-        loadUserInfo();
-    }, []);
+    const loadDataVideos = async () => {
+        try {
+            const response = await axios.get(
+                `http://192.168.1.198:3000/thumbnail-video`
+            );
+            setVideos(response.data);
+        } catch (e) {
+            console.error("Failed to fetch videos:", e);
+            Alert.alert("Error", "Failed to fetch videos");
+        }
+    };
 
-    const [images, setImages] = useState([]);
-    const [stories, setStory] = useState([]);
     const fetchData = async () => {
         try {
             const response = await axios.get(
@@ -102,10 +95,12 @@ export default HomeScreen = ({ navigation }) => {
         }
     };
 
-    useEffect(() => {
-        fetchData();
-        fetchStories();
-    });
+    useEffect(async () => {
+        await loadUserInfo();
+        await fetchStories();
+        await loadDataVideos();
+        await fetchData();
+    }, []);
 
     // Hàm renderItem cho phần Stories
     const renderItem1 = ({ item }) => {
@@ -145,7 +140,21 @@ export default HomeScreen = ({ navigation }) => {
                 navigation.navigate("VideoStreaming", { userData: userData })
             }
         >
-            <Image source={item.image} />
+            <Image
+                style={{
+                    height: 200,
+                    width: 200,
+                    borderRadius: 10,
+                    marginRight: 10,
+                    borderWidth: 1,
+                    borderColor: "#0099FF",
+                }}
+                source={{
+                    uri:
+                        item.thumbnail ||
+                        "https://cdn1.vectorstock.com/i/1000x1000/76/90/not-found-rubber-stamp-vector-13537690.jpg",
+                }}
+            />
         </TouchableOpacity>
     );
 
@@ -242,7 +251,7 @@ export default HomeScreen = ({ navigation }) => {
                 </View>
 
                 <FlatList
-                    data={dataTopTrending}
+                    data={videos}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.id}
                     horizontal={true}

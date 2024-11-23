@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import {
     View,
@@ -12,11 +12,29 @@ import { TextInput, Text } from "react-native";
 import { Video } from "expo-av";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
-import { createThumbnail } from "react-native-create-thumbnail";
-const Post_Video_Screen = ({ navigation, route }) => {
+import * as VideoThumbnails from "expo-video-thumbnails";
+export default Post_Video_Screen = ({ navigation, route }) => {
     const { media, mediaType, user } = route.params;
     const [content, setContent] = useState("");
+    const [thumbnail, setThumbnail] = useState(null);
+    const extractThumbnail = async (videoUri) => {
+        try {
+            const { uri } = await VideoThumbnails.getThumbnailAsync(videoUri, {
+                time: 1000, // Thời điểm lấy thumbnail (mili giây)
+            });
+            console.log("Thumbnail URI:", uri);
+            setThumbnail(uri);
+        } catch (error) {
+            console.error("Error generating thumbnail:", error);
+            return null;
+        }
+    };
 
+    useEffect(() => {
+        extractThumbnail(media);
+    });
+
+    useEffect(() => {});
     const postMedia = async (userId, type, url, navigation) => {
         try {
             const response = await axios.post(
@@ -26,6 +44,7 @@ const Post_Video_Screen = ({ navigation, route }) => {
                     type,
                     url,
                     content,
+                    thumbnail,
                 }
             );
 
@@ -240,5 +259,3 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
 });
-
-export default Post_Video_Screen;
