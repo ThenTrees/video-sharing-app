@@ -22,7 +22,7 @@ import videoDetails from "./screen/videoDetails.js";
 import editProfile from "./screen/EditProfile.js";
 import ImageView from "./screen/ImageView.js";
 import StoryDetails from "./screen/storyDetails.js";
-// import StoryStreaming from './screen/storyStreaming.js';
+
 import ImageStreaming from "./screen/imageStreaming.js";
 import { TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -39,7 +39,6 @@ function TabNavigator({ navigation, route }) {
             if (data) {
                 setUserData(data);
             } else {
-                Alert.alert("Error", "Please login first");
                 navigation.navigate("Login");
             }
         } catch (e) {
@@ -57,7 +56,7 @@ function TabNavigator({ navigation, route }) {
 
     useEffect(() => {
         loadUserInfo();
-    });
+    }, []);
 
     return (
         <Tab.Navigator

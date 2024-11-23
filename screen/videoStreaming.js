@@ -17,7 +17,7 @@ import Icon from "react-native-vector-icons/Entypo";
 import Icon2 from "react-native-vector-icons/FontAwesome";
 import Icon3 from "react-native-vector-icons/EvilIcons";
 
-export default function VideoStreaming({ navigation, route }) {
+export default VideoStreaming = ({ navigation, route }) => {
     const videoRefs = useRef([]);
     const [activePosId, setActivePostId] = useState(null);
     const { height } = useWindowDimensions();
@@ -38,33 +38,31 @@ export default function VideoStreaming({ navigation, route }) {
             const response = await axios.get(
                 `http://192.168.1.198:3000/video-watching`
             );
-            if (Array.isArray(response.data) && response.data.length > 0) {
-                setVideos(response.data);
-                setActivePostId(response.data[0].id);
-                updateCurrentVideoData(response.data[0].id);
-                // Check like status for all videos
-                const likeStatuses = {};
-                for (const video of response.data) {
-                    const res = await axios.get(
-                        "http://192.168.1.198:3000/is-like",
-                        {
-                            params: {
-                                post_id: video.id,
-                                user_id: user.id,
-                            },
-                        }
-                    );
-                    likeStatuses[video.id] = res.data.is_like;
-                }
-                setLikedPosts(likeStatuses);
+            setVideos(response.data);
+            setActivePostId(response.data[0].id);
+            updateCurrentVideoData(response.data[0].id);
+            // Check like status for all videos
+            const likeStatuses = {};
+            for (const video of response.data) {
+                const res = await axios.get(
+                    "http://192.168.1.198:3000/is-like",
+                    {
+                        params: {
+                            post_id: video.id,
+                            user_id: user.id,
+                        },
+                    }
+                );
+                likeStatuses[video.id] = res.data.is_like;
             }
+            setLikedPosts(likeStatuses);
         } catch (error) {
             console.error("Error fetching video data:", error);
         }
     };
 
-    useEffect(() => {
-        fetchData();
+    useEffect(async () => {
+        await fetchData();
     }, []);
 
     useEffect(() => {
@@ -134,7 +132,6 @@ export default function VideoStreaming({ navigation, route }) {
 
             // Cập nhật thông tin video hiện tại
             updateCurrentVideoData(newActivePostId);
-
             videoRefs.current.forEach((video, index) => {
                 if (video) {
                     if (videos[index].id === newActivePostId) {
@@ -481,7 +478,7 @@ export default function VideoStreaming({ navigation, route }) {
             </Modal>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {

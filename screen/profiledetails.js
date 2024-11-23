@@ -58,7 +58,7 @@ const MyVideos = ({ id }) => {
                             borderRadius: 10,
                         }}
                         source={{
-                            uri: "https://pngmagic.com/product_images/black-background-for-youtube-thumbnail.jpg",
+                            uri: item.thumbnail,
                         }}
                     />
                 </TouchableOpacity>
@@ -292,7 +292,7 @@ export default ProfileDetails = ({ navigation, route }) => {
                         navigation.navigate("Following", { user: user })
                     }
                 >
-                    <Text>{data.following_count}</Text>
+                    <Text>{data.following_count || 0}</Text>
                     <Text style={styles.textgrey}>Following</Text>
                 </TouchableOpacity>
 
@@ -302,12 +302,12 @@ export default ProfileDetails = ({ navigation, route }) => {
                         navigation.navigate("Following", { user: user })
                     }
                 >
-                    <Text>{data.followers_count}</Text>
+                    <Text>{data.followers_count || 0}</Text>
                     <Text style={styles.textgrey}>Followers</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.fl}>
-                    <Text>6031</Text>
+                    <Text>8386</Text>
                     <Text style={styles.textgrey}>Like</Text>
                 </TouchableOpacity>
             </View>

@@ -189,6 +189,15 @@ export default FollowingScreen = ({ navigation }) => {
             const info = JSON.parse(await AsyncStorage.getItem("userToken"));
             if (info) {
                 setUserData(info);
+                try {
+                    const response = await axios.get(
+                        `http://192.168.1.198:3000/user-suggest?id=${info.id}`
+                    );
+                    setUsers(response.data);
+                } catch (error) {
+                    console.error("Error fetching user:", error);
+                    Alert.alert("Lỗi", "Không thể lấy danh sách user");
+                }
             } else {
                 Alert.alert("Error", "Please login first");
                 navigation.navigate("Login");
@@ -200,19 +209,6 @@ export default FollowingScreen = ({ navigation }) => {
 
     useEffect(() => {
         loadUserInfo();
-    }, []);
-    const fetchUsers = async () => {
-        try {
-            const response = await axios.get("http://192.168.1.198:3000/users");
-            setUsers(response.data);
-        } catch (error) {
-            console.error("Error fetching user:", error);
-            Alert.alert("Lỗi", "Không thể lấy danh sách user");
-        }
-    };
-
-    useEffect(() => {
-        fetchUsers();
     }, []);
 
     return (

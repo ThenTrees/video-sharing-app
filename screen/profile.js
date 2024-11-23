@@ -262,7 +262,7 @@ export default ProfileScreen = ({ navigation }) => {
                             navigation.navigate("Following", { user: userData })
                         }
                     >
-                        <Text>{dataFL.following_count}</Text>
+                        <Text>{dataFL.following_count || 0}</Text>
                         <Text style={styles.textGrey}>Following</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -271,7 +271,7 @@ export default ProfileScreen = ({ navigation }) => {
                             navigation.navigate("Following", { user: userData })
                         }
                     >
-                        <Text>{dataFL.followers_count}</Text>
+                        <Text>{dataFL.followers_count || 0}</Text>
                         <Text style={styles.textGrey}>Followers</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.statBox}>
