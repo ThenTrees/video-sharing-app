@@ -6,10 +6,8 @@ import {
     FlatList,
     TouchableOpacity,
     useWindowDimensions,
-    Dimensions,
     Modal,
     TextInput,
-    Button,
     Alert,
     Image,
 } from "react-native";
@@ -18,14 +16,14 @@ import Icon from "react-native-vector-icons/EvilIcons";
 import Icon2 from "react-native-vector-icons/FontAwesome";
 import axios from "axios";
 
-export default function VideoStreaming({ navigation, route }) {
+export default VideoStreaming = ({ navigation, route }) => {
     const videoRefs = useRef([]);
     const [activePosId, setActivePostId] = useState(null);
     const { height } = useWindowDimensions();
     const [likedPosts, setLikedPosts] = useState({});
-    const post_id = route.params.idPost;
-    const user_id = route.params.idUser;
-    const avatar = route.params.avatar;
+    const id = route.params.idPost;
+    const idUser = route.params.idUser;
+    const avatar = route.params;
 
     const [videos, setVideos] = useState([]);
     const [comments, setComments] = useState([]);
@@ -33,28 +31,26 @@ export default function VideoStreaming({ navigation, route }) {
     const [likecount, setlikeCount] = useState("");
     const [isCommentsVisible, setCommentsVisible] = useState(false);
     const [newComment, setNewComment] = useState("");
-    // const widthScreen = Dimensions.get('window').width;
-    const fetchData = async (id) => {
+    const fetchData = async () => {
         try {
             const response = await axios.get(
                 `http://192.168.1.198:3000/video-details?id=${id}`
             );
-            if (Array.isArray(response.data) && response.data.length > 0) {
-                setVideos(response.data);
-                setActivePostId(response.data[0].id);
-                fetchCommentCount();
-                fetchLikeCount();
-            }
+
+            setVideos(response.data);
+            setActivePostId(response.data.id);
+            fetchCommentCount();
+            fetchLikeCount();
         } catch (error) {
             console.error("Error fetching video data:", error);
         }
     };
 
     useEffect(() => {
-        if (post_id) {
-            fetchData(post_id);
+        if (id) {
+            fetchData(id);
         }
-    }, [post_id]);
+    }, [id]);
 
     const handlePlayPause = (index) => {
         const video = videoRefs.current[index];
@@ -101,14 +97,8 @@ export default function VideoStreaming({ navigation, route }) {
             const response = await axios.get(
                 `http://192.168.1.198:3000/comment-count?id=${id}`
             );
-            if (response.status === 200) {
-                setCount(response.data);
-            } else {
-                Alert.alert(
-                    "Lỗi",
-                    "Không thể lấy bình luận. Vui lòng thử lại sau."
-                );
-            }
+
+            setCount(response.data);
         } catch (error) {
             console.error("Error fetching comments:", error);
             Alert.alert(
@@ -123,14 +113,8 @@ export default function VideoStreaming({ navigation, route }) {
             const response = await axios.get(
                 `http://192.168.1.198:3000/like-count?id=${id}`
             );
-            if (response.status === 200) {
-                setlikeCount(response.data);
-            } else {
-                Alert.alert(
-                    "Lỗi",
-                    "Không thể lấy bình luận. Vui lòng thử lại sau."
-                );
-            }
+
+            setlikeCount(response.data);
         } catch (error) {
             console.error("Error fetching comments:", error);
             Alert.alert(
@@ -141,9 +125,9 @@ export default function VideoStreaming({ navigation, route }) {
     };
 
     // const handleAddComment = () => {
-    //     const newCommentData = { id: Date.now().toString(), text: newComment };
-    //     setComments([...comments, newCommentData]); // Add the new comment
-    //     setNewComment(""); // Clear the input
+    //   const newCommentData = { id: Date.now().toString(), text: newComment };
+    //   setComments([...comments, newCommentData]); // Add the new comment
+    //   setNewComment(''); // Clear the input
     // };
 
     const renderVideo = ({ item, index }) => (
@@ -169,7 +153,7 @@ export default function VideoStreaming({ navigation, route }) {
                                 marginBottom: 10,
                             },
                         ]}
-                        source={{ uri: avatar }}
+                        source={{ uri: avatar.avatar }}
                     />
                 </TouchableOpacity>
 
@@ -181,9 +165,7 @@ export default function VideoStreaming({ navigation, route }) {
                         color={likedPosts[item.id] ? "red" : "white"}
                     />
                     <Text style={styles.count}>
-                        {likecount[0]?.like_count
-                            ? likecount[0]?.like_count
-                            : 0}
+                        {likecount.like_count ? likecount?.like_count : 0}
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => fetchComments(item.id)}>
@@ -194,7 +176,7 @@ export default function VideoStreaming({ navigation, route }) {
                         color="white"
                     />
                     <Text style={styles.count}>
-                        {count[0]?.comment_count ? count[0]?.comment_count : 0}
+                        {count.comment_count ? count.comment_count : 0}
                     </Text>
                 </TouchableOpacity>
 
@@ -299,7 +281,7 @@ export default function VideoStreaming({ navigation, route }) {
                                                     { fontWeight: "bold" },
                                                 ]}
                                             >
-                                                {item.user_name}
+                                                {item.username}
                                             </Text>
                                             <Text
                                                 style={{
@@ -345,7 +327,7 @@ export default function VideoStreaming({ navigation, route }) {
             </Modal>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -355,8 +337,8 @@ const styles = StyleSheet.create({
     backButton: {
         position: "absolute",
         top: 70,
-        left: 20,
-        zIndex: 11,
+        left: 10,
+        zIndex: 2,
     },
     videoContainer: {
         width: "100%",

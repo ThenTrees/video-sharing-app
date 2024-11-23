@@ -49,7 +49,7 @@ const MyVideos = ({ id }) => {
     return (
         <FlatList
             data={videos}
-            keyExtractor={(item) => item.pid.toString()}
+            keyExtractor={(item) => item.pid}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
                 <TouchableOpacity
@@ -263,16 +263,16 @@ export default ProfileScreen = ({ navigation }) => {
                             navigation.navigate("Following", { user: userData })
                         }
                     >
-                        <Text>{dataFL.following_count || 0}</Text>
+                        <Text>{dataFL.following_count}</Text>
                         <Text style={styles.textGrey}>Following</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.statBox}
                         onPress={() =>
-                            navigation.navigate("Followers", { user: userData })
+                            navigation.navigate("Following", { user: userData })
                         }
                     >
-                        <Text>{dataFL.followers_count || 0}</Text>
+                        <Text>{dataFL.followers_count}</Text>
                         <Text style={styles.textGrey}>Followers</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.statBox}>

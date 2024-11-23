@@ -70,9 +70,10 @@ export default function VideoStreaming({ navigation }) {
                         style={{
                             height: 30,
                             width: 30,
-                            borderRadius: 50,
+                            borderRadius: "50%",
                             marginHorizontal: 10,
                         }}
+                        resizeMode="contain"
                         source={{ uri: item.avatar }}
                     />
                     <Text

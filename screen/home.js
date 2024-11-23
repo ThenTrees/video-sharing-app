@@ -56,7 +56,7 @@ const dataAudio = [
     },
 ];
 
-export default HomeScreen = ({ navigation, route }) => {
+export default HomeScreen = ({ navigation }) => {
     const [userData, setUserData] = useState({});
 
     const loadUserInfo = async () => {
@@ -105,7 +105,7 @@ export default HomeScreen = ({ navigation, route }) => {
     useEffect(() => {
         fetchData();
         fetchStories();
-    }, []);
+    });
 
     // Hàm renderItem cho phần Stories
     const renderItem1 = ({ item }) => {
@@ -130,7 +130,7 @@ export default HomeScreen = ({ navigation, route }) => {
                         borderWidth: 3,
                         borderColor: "#0099FF",
                     }}
-                    source={`http://192.168.1.198:3000/uploads/${item.avatar}`}
+                    source={{ uri: item.avatar }}
                 />
                 <Text style={styles.username}>{displayName}</Text>
             </TouchableOpacity>

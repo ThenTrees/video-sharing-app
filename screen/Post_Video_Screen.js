@@ -12,10 +12,9 @@ import { TextInput, Text } from "react-native";
 import { Video } from "expo-av";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
-
+import { createThumbnail } from "react-native-create-thumbnail";
 const Post_Video_Screen = ({ navigation, route }) => {
     const { media, mediaType, user } = route.params;
-
     const [content, setContent] = useState("");
 
     const postMedia = async (userId, type, url, navigation) => {
