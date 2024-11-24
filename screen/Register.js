@@ -72,7 +72,7 @@ export default RegisterScreen = ({ navigation }) => {
 
         try {
             const response = await axios.post(
-                "http://192.168.1.198:3000/register",
+                "http://192.168.1.245:3000/register",
                 formData,
                 {
                     headers: { "Content-Type": "multipart/form-data" },

@@ -27,7 +27,7 @@ export default ProfileScreen = ({ navigation }) => {
         const fetchDataVideo = async (id) => {
             try {
                 const response = await axios.get(
-                    `http://192.168.1.198:3000/profile-videos?id=${id}`
+                    `http://192.168.1.245:3000/profile-videos?id=${id}`
                 );
                 setVideos(Array.isArray(response.data) ? response.data : []);
             } catch (error) {
@@ -89,7 +89,7 @@ export default ProfileScreen = ({ navigation }) => {
         const fetchDataImage = async (id) => {
             try {
                 const response = await axios.get(
-                    `http://192.168.1.198:3000/profile-images?id=${id}`
+                    `http://192.168.1.245:3000/profile-images?id=${id}`
                 );
                 setImages(Array.isArray(response.data) ? response.data : []);
             } catch (error) {
@@ -228,7 +228,7 @@ export default ProfileScreen = ({ navigation }) => {
     const fetchData = async (id) => {
         try {
             const response = await axios.get(
-                `http://192.168.1.198:3000/follow?id=${id}`
+                `http://192.168.1.245:3000/follow?id=${id}`
             );
             setDataFL(response.data);
         } catch (error) {

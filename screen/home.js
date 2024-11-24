@@ -62,7 +62,7 @@ export default HomeScreen = ({ navigation }) => {
     const loadDataVideos = async () => {
         try {
             const response = await axios.get(
-                `http://192.168.1.198:3000/thumbnail-video`
+                `http://192.168.1.245:3000/thumbnail-video`
             );
             setVideos(response.data);
         } catch (e) {
@@ -74,7 +74,7 @@ export default HomeScreen = ({ navigation }) => {
     const fetchData = async () => {
         try {
             const response = await axios.get(
-                `http://192.168.1.198:3000/image-streaming-4`
+                `http://192.168.1.245:3000/image-streaming-4`
             );
             setImages(response.data);
         } catch (error) {
@@ -85,7 +85,7 @@ export default HomeScreen = ({ navigation }) => {
     const fetchStories = async () => {
         try {
             const response = await axios.get(
-                "http://192.168.1.198:3000/user-stories"
+                "http://192.168.1.245:3000/user-stories"
             );
 
             setStory(

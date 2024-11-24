@@ -13,7 +13,8 @@ import React, { useState, useEffect } from "react";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-export default MediaPickerExample = ({ navigation, route }) => {
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+export default CreateStoryScreen = ({ navigation, route }) => {
     const [media, setMedia] = useState(null);
     const [mediaType, setMediaType] = useState(null);
     const [isFilterModalVisible, setFilterModalVisible] = useState(false);
@@ -28,7 +29,6 @@ export default MediaPickerExample = ({ navigation, route }) => {
             if (data) {
                 setUserData(data);
             } else {
-                
                 navigation.navigate("Login");
             }
         } catch (e) {
@@ -144,6 +144,8 @@ export default MediaPickerExample = ({ navigation, route }) => {
         if (!result.canceled) {
             setMedia(result.assets[0].uri);
             setMediaType(result.assets[0].type);
+        } else {
+            navigation.navigate("Home");
         }
     };
 
@@ -162,6 +164,8 @@ export default MediaPickerExample = ({ navigation, route }) => {
         if (!result.canceled) {
             setMedia(result.assets[0].uri);
             setMediaType(result.assets[0].type);
+        } else {
+            navigation.navigate("Home");
         }
     };
 
@@ -183,8 +187,8 @@ export default MediaPickerExample = ({ navigation, route }) => {
                 style={{
                     alignSelf: "center",
                     position: "absolute",
-                    top: 140,
-                    zIndex: 111,
+                    top: 60,
+                    zIndex: 2,
                 }}
                 onPress={toggleAudioModal}
             >
@@ -238,10 +242,16 @@ export default MediaPickerExample = ({ navigation, route }) => {
             <View style={styles.bottomButtonsContainer}>
                 <TouchableOpacity
                     style={styles.bottomButton}
-                    onPress={recordMedia}
+                    onPress={() => {
+                        navigation.goBack();
+                    }}
                 >
-                    <Ionicons name="happy-outline" size={24} color="white" />
-                    <Text style={styles.bottomButtonText}>Effect</Text>
+                    <MaterialCommunityIcons
+                        name="cancel"
+                        size={24}
+                        color="white"
+                    />
+                    <Text style={styles.bottomButtonText}>Cancel</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity

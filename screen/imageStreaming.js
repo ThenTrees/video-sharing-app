@@ -39,7 +39,7 @@ const ImageViewScreen = ({ navigation, route }) => {
     const fetchData = async () => {
         try {
             const response = await axios.get(
-                "http://192.168.1.198:3000/image-streaming"
+                "http://192.168.1.245:3000/image-streaming"
             );
             if (Array.isArray(response.data) && response.data.length > 0) {
                 setImages(response.data);
@@ -52,7 +52,7 @@ const ImageViewScreen = ({ navigation, route }) => {
     const fetchComments = async (idPost) => {
         try {
             const response = await axios.get(
-                `http://192.168.1.198:3000/comments?id=${idPost}`
+                `http://192.168.1.245:3000/comments?id=${idPost}`
             );
             if (response.status === 200) {
                 setComments(response.data);
@@ -164,7 +164,7 @@ const ImageViewScreen = ({ navigation, route }) => {
                                         }}
                                     >
                                         <Image
-                                            source={`http://192.168.1.198:3000/uploads/${item.avatar}`}
+                                            source={`http://192.168.1.245:3000/uploads/${item.avatar}`}
                                             style={{
                                                 height: 50,
                                                 width: 50,

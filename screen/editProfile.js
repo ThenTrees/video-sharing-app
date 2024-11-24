@@ -58,7 +58,7 @@ export default EditProfile = ({ navigation, route }) => {
     const updatePost = async (idUser, username, avatar, email, birthDay) => {
         try {
             const response = await axios.put(
-                "http://192.168.1.198:3000/update-profile",
+                "http://192.168.1.245:3000/update-profile",
                 {
                     idUser,
                     username,

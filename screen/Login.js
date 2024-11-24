@@ -40,7 +40,7 @@ export default LoginScreen = ({ navigation }) => {
 
         try {
             const response = await axios.post(
-                "http://192.168.1.198:3000/login",
+                "http://192.168.1.245:3000/login",
                 {
                     email,
                     password,

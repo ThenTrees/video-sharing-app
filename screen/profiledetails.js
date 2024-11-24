@@ -22,7 +22,7 @@ const MyVideos = ({ id }) => {
     const fetchData = async (id) => {
         try {
             const response = await axios.get(
-                `http://192.168.1.198:3000/profile-videos?id=${id}`
+                `http://192.168.1.245:3000/profile-videos?id=${id}`
             );
             setVideos(response.data);
         } catch (error) {
@@ -144,7 +144,7 @@ export default ProfileDetails = ({ navigation, route }) => {
     const fetchData = async (id) => {
         try {
             const response = await axios.get(
-                `http://192.168.1.198:3000/follow?id=${id}`
+                `http://192.168.1.245:3000/follow?id=${id}`
             );
             if (response.data) {
                 const followData = response.data;
@@ -165,7 +165,7 @@ export default ProfileDetails = ({ navigation, route }) => {
     const checkIsFollowing = async (idFollowing, idFollowed) => {
         try {
             const response = await axios.get(
-                "http://192.168.1.198:3000/is-following",
+                "http://192.168.1.245:3000/is-following",
                 {
                     params: {
                         id_following: idFollowing,
@@ -190,7 +190,7 @@ export default ProfileDetails = ({ navigation, route }) => {
     const follow = async (idFollowing, idFollowed) => {
         try {
             const response = await axios.post(
-                "http://192.168.1.198:3000/follow",
+                "http://192.168.1.245:3000/follow",
                 {
                     idFollowing,
                     idFollowed,
@@ -209,7 +209,7 @@ export default ProfileDetails = ({ navigation, route }) => {
     const unfollow = async (idFollowing, idFollowed) => {
         try {
             const response = await axios.post(
-                "http://192.168.1.198:3000/un-follow",
+                "http://192.168.1.245:3000/un-follow",
                 {
                     idFollowing,
                     idFollowed,

@@ -34,7 +34,7 @@ export default VideoStreaming = ({ navigation, route }) => {
     const fetchData = async () => {
         try {
             const response = await axios.get(
-                `http://192.168.1.198:3000/video-details?id=${id}`
+                `http://192.168.1.245:3000/video-details?id=${id}`
             );
 
             setVideos(response.data);
@@ -72,7 +72,7 @@ export default VideoStreaming = ({ navigation, route }) => {
     const fetchComments = async () => {
         try {
             const response = await axios.get(
-                `http://192.168.1.198:3000/comments?id=${id}`
+                `http://192.168.1.245:3000/comments?id=${id}`
             );
             if (response.status === 200) {
                 setComments(response.data);
@@ -95,7 +95,7 @@ export default VideoStreaming = ({ navigation, route }) => {
     const fetchCommentCount = async () => {
         try {
             const response = await axios.get(
-                `http://192.168.1.198:3000/comment-count?id=${id}`
+                `http://192.168.1.245:3000/comment-count?id=${id}`
             );
 
             setCount(response.data);
@@ -111,7 +111,7 @@ export default VideoStreaming = ({ navigation, route }) => {
     const fetchLikeCount = async () => {
         try {
             const response = await axios.get(
-                `http://192.168.1.198:3000/like-count?id=${id}`
+                `http://192.168.1.245:3000/like-count?id=${id}`
             );
 
             setlikeCount(response.data);

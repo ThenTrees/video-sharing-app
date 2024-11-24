@@ -22,7 +22,7 @@ export default VideoStreaming = ({ navigation, route }) => {
     const fetchStories = async () => {
         try {
             const response = await axios.get(
-                `http://192.168.1.198:3000/stories-of-user?id=${user.user_id}`
+                `http://192.168.1.245:3000/stories-of-user?id=${user.user_id}`
             );
             setStories(response.data);
         } catch (error) {

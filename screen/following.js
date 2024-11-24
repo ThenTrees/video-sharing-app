@@ -15,7 +15,7 @@ const Following = ({ idUser, myData }) => {
     const fetchData = async (idUser) => {
         try {
             const response = await axios.get(
-                `http://192.168.1.198:3000/followed?id=${idUser}`
+                `http://192.168.1.245:3000/followed?id=${idUser}`
             );
             setFollowed(response.data); // ai follow minh
         } catch (error) {
@@ -78,7 +78,7 @@ const Followed = ({ idUser, myData }) => {
     const fetchData = async (idUser) => {
         try {
             const response = await axios.get(
-                `http://192.168.1.198:3000/following?id=${idUser}`
+                `http://192.168.1.245:3000/following?id=${idUser}`
             );
 
             setFollowed(response.data); // minh follow ai
@@ -191,7 +191,7 @@ export default FollowingScreen = ({ navigation }) => {
                 setUserData(info);
                 try {
                     const response = await axios.get(
-                        `http://192.168.1.198:3000/user-suggest?id=${info.id}`
+                        `http://192.168.1.245:3000/user-suggest?id=${info.id}`
                     );
                     setUsers(response.data);
                 } catch (error) {
