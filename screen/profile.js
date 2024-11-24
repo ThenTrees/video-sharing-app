@@ -12,17 +12,15 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import { useNavigation } from "@react-navigation/native";
 
 const widthScreen = Dimensions.get("window").width;
 
-export default ProfileScreen = ({ navigation }) => {
+const ProfileScreen = ({ navigation }) => {
     const [dataFL, setDataFL] = useState({});
     const [userData, setUserData] = useState({});
 
-    const MyVideos = ({ id }) => {
+    const MyVideos = ({ id, navigation }) => {
         const [videos, setVideos] = useState([]);
-        const navigation = useNavigation();
 
         const fetchDataVideo = async (id) => {
             try {
@@ -31,7 +29,7 @@ export default ProfileScreen = ({ navigation }) => {
                 );
                 setVideos(Array.isArray(response.data) ? response.data : []);
             } catch (error) {
-                console.error("Error fetching videos:", error.message);
+                Alert.alert("Error", "Failed to fetch videos.");
                 setVideos([]);
             }
         };
@@ -53,8 +51,7 @@ export default ProfileScreen = ({ navigation }) => {
         return (
             <FlatList
                 data={videos}
-                keyExtractor={(item) => item.pid}
-                showsVerticalScrollIndicator={false}
+                keyExtractor={(item, index) => `${item.pid}-${index}`}
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         style={styles.videoItem}
@@ -82,9 +79,8 @@ export default ProfileScreen = ({ navigation }) => {
         );
     };
 
-    const MyImages = ({ id }) => {
+    const MyImages = ({ id, navigation }) => {
         const [images, setImages] = useState([]);
-        const navigation = useNavigation();
 
         const fetchDataImage = async (id) => {
             try {
@@ -93,7 +89,7 @@ export default ProfileScreen = ({ navigation }) => {
                 );
                 setImages(Array.isArray(response.data) ? response.data : []);
             } catch (error) {
-                console.error("Error fetching images:", error.message);
+                Alert.alert("Error", "Failed to fetch images.");
                 setImages([]);
             }
         };
@@ -115,8 +111,7 @@ export default ProfileScreen = ({ navigation }) => {
         return (
             <FlatList
                 data={images}
-                keyExtractor={(item) => item.pid.toString()}
-                showsVerticalScrollIndicator={false}
+                keyExtractor={(item, index) => `${item.pid}_${index}`}
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         style={styles.videoItem}
@@ -149,13 +144,12 @@ export default ProfileScreen = ({ navigation }) => {
         return (
             <FlatList
                 data={likedVideos}
-                showsVerticalScrollIndicator={false}
+                keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <TouchableOpacity style={styles.videoItem}>
                         <Image style={styles.thumbnail} source={item.image} />
                     </TouchableOpacity>
                 )}
-                keyExtractor={(item) => item.id}
                 numColumns={3}
                 contentContainerStyle={styles.flatListContainer}
             />
@@ -171,61 +165,56 @@ export default ProfileScreen = ({ navigation }) => {
         ]);
 
         const renderScene = SceneMap({
-            videos: () => <MyVideos id={id} />,
-            images: () => <MyImages id={id} />,
+            videos: () => <MyVideos id={id} navigation={navigation} />,
+            images: () => <MyImages id={id} navigation={navigation} />,
             liked: MyLiked,
         });
-
-        const renderTabBar = (props) => (
-            <TabBar
-                {...props}
-                key={index}
-                indicatorStyle={styles.indicator}
-                style={styles.tabBar}
-                renderLabel={({ route, focused }) => (
-                    <Text
-                        style={[
-                            styles.tabLabel,
-                            focused
-                                ? styles.activeTabLabel
-                                : styles.inactiveTabLabel,
-                        ]}
-                    >
-                        {route.title}
-                    </Text>
-                )}
-            />
-        );
 
         return (
             <TabView
                 navigationState={{ index, routes }}
                 renderScene={renderScene}
-                renderTabBar={renderTabBar}
+                renderTabBar={(props) => (
+                    <TabBar
+                        {...props}
+                        indicatorStyle={styles.indicator}
+                        style={styles.tabBar}
+                        renderLabel={({ route, focused }) => (
+                            <Text
+                                style={[
+                                    styles.tabLabel,
+                                    focused
+                                        ? styles.activeTabLabel
+                                        : styles.inactiveTabLabel,
+                                ]}
+                            >
+                                {route.title}
+                            </Text>
+                        )}
+                    />
+                )}
                 onIndexChange={setIndex}
                 initialLayout={{ width: widthScreen }}
+                lazy
             />
         );
     };
 
     const loadUserInfo = async () => {
         try {
-            const info = JSON.parse(await AsyncStorage.getItem("userToken"));
+            const token = await AsyncStorage.getItem("userToken");
+            const info = token ? JSON.parse(token) : null;
             if (info) {
                 setUserData(info);
             } else {
                 navigation.navigate("Login");
             }
         } catch (e) {
-            console.error("Failed to fetch data:", e);
+            Alert.alert("Error", "Failed to load user info.");
         }
     };
 
-    useEffect(() => {
-        loadUserInfo();
-    }, []);
-
-    const fetchData = async (id) => {
+    const fetchDataFL = async (id) => {
         try {
             const response = await axios.get(
                 `http://192.168.1.245:3000/follow?id=${id}`
@@ -238,8 +227,12 @@ export default ProfileScreen = ({ navigation }) => {
     };
 
     useEffect(() => {
+        loadUserInfo();
+    }, []);
+
+    useEffect(() => {
         if (userData.id) {
-            fetchData(userData.id);
+            fetchDataFL(userData.id);
         }
     }, [userData]);
 
@@ -250,12 +243,12 @@ export default ProfileScreen = ({ navigation }) => {
                     style={styles.profileImage}
                     source={{
                         uri:
-                            userData.avatar ||
+                            userData?.avatar ||
                             "https://via.placeholder.com/150",
                     }}
                 />
                 <Text style={styles.profileName}>
-                    {userData.user_name || "Unknown User"}
+                    {userData?.user_name ?? "Unknown User"}
                 </Text>
                 <View style={styles.statsContainer}>
                     <TouchableOpacity
@@ -264,16 +257,16 @@ export default ProfileScreen = ({ navigation }) => {
                             navigation.navigate("Following", { user: userData })
                         }
                     >
-                        <Text>{dataFL.following_count || 0}</Text>
+                        <Text>{dataFL?.following_count ?? 0}</Text>
                         <Text style={styles.textGrey}>Following</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.statBox}
                         onPress={() =>
-                            navigation.navigate("Following", { user: userData })
+                            navigation.navigate("Followers", { user: userData })
                         }
                     >
-                        <Text>{dataFL.followers_count || 0}</Text>
+                        <Text>{dataFL?.followers_count ?? 0}</Text>
                         <Text style={styles.textGrey}>Followers</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.statBox}>
@@ -288,64 +281,25 @@ export default ProfileScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-    },
-    imgLogo: {
-        alignItems: "center",
-        marginTop: 30,
-    },
-    profileImage: {
-        height: 150,
-        width: 150,
-        borderRadius: 75,
-    },
-    profileName: {
-        fontSize: 24,
-        fontWeight: "bold",
-        marginVertical: 10,
-    },
-    statsContainer: {
-        flexDirection: "row",
-        marginTop: 20,
-    },
-    statBox: {
-        paddingHorizontal: 15,
-        alignItems: "center",
-    },
-    textGrey: {
-        color: "grey",
-    },
-    videoItem: {
-        width: (widthScreen - 30) / 3,
-        margin: 5,
-        height: 180,
-    },
-    thumbnail: {
-        height: "100%",
-        width: "100%",
-        borderRadius: 10,
-    },
-    flatListContainer: {
-        marginTop: 10,
-        alignItems: "center",
-    },
+    container: { flex: 1, backgroundColor: "#fff" },
+    imgLogo: { alignItems: "center", marginTop: 30 },
+    profileImage: { height: 150, width: 150, borderRadius: 75 },
+    profileName: { fontSize: 24, fontWeight: "bold", marginVertical: 10 },
+    statsContainer: { flexDirection: "row", marginTop: 20 },
+    statBox: { paddingHorizontal: 15, alignItems: "center" },
+    textGrey: { color: "grey" },
+    videoItem: { width: widthScreen / 3 - 10, margin: 5, height: 180 },
+    thumbnail: { height: "100%", width: "100%", borderRadius: 10 },
+    flatListContainer: { marginTop: 10, alignItems: "center" },
     tabBar: {
         backgroundColor: "white",
         borderBottomWidth: 1,
         borderBottomColor: "#e0e0e0",
     },
-    indicator: {
-        backgroundColor: "black",
-    },
-    tabLabel: {
-        fontSize: 14,
-    },
-    activeTabLabel: {
-        color: "black",
-    },
-    inactiveTabLabel: {
-        color: "grey",
-    },
+    indicator: { backgroundColor: "black" },
+    tabLabel: { fontSize: 14 },
+    activeTabLabel: { color: "black" },
+    inactiveTabLabel: { color: "grey" },
 });
+
+export default ProfileScreen;

@@ -810,6 +810,23 @@ app.get("/user-suggest", async (req, res) => {
     }
 });
 
+app.get("/user-like-post", async (req, res) => {
+    const id = req.query.id;
+    try {
+        const sql = `SELECT post_id FROM likes WHERE user_id = ?`;
+        db.query(sql, [id], (err, results) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ message: "Lỗi server" });
+            }
+            res.status(200).json(results);
+        });
+    } catch (err) {
+        console.log("Error fetching like post by user :", err);
+        res.status(500).send("Server Error");
+    }
+});
+
 // Khởi chạy server
 app.listen(3000, () => {
     console.log("Server running on http://localhost:3000");

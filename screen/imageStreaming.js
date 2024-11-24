@@ -226,7 +226,7 @@ const ImageViewScreen = ({ navigation, route }) => {
         <FlatList
             data={images}
             renderItem={renderAnh}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item, index) => `${item.id}-${index}`}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ marginTop: 10 }}
             showsVerticalScrollIndicator={false}

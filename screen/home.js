@@ -237,7 +237,7 @@ export default HomeScreen = ({ navigation }) => {
                 <FlatList
                     data={stories}
                     renderItem={renderItem1}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item, index) => `${item.id}-${index}`}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                 />
@@ -270,7 +270,7 @@ export default HomeScreen = ({ navigation }) => {
                 <FlatList
                     data={videos}
                     renderItem={renderItem}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item, index) => `${item.id}-${index}`}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{ marginTop: 10 }}
@@ -355,7 +355,7 @@ export default HomeScreen = ({ navigation }) => {
                 <FlatList
                     data={images}
                     renderItem={renderAnh}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item, index) => `${item.id}-${index}`}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{ marginTop: 10 }}
@@ -383,7 +383,7 @@ export default HomeScreen = ({ navigation }) => {
                 <FlatList
                     data={dataAudio}
                     renderItem={renderItem2}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyExtractor={(item, index) => `${item.id}-${index}`}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{ marginTop: 10 }}

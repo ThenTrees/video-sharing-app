@@ -69,7 +69,7 @@ export default VideoStreaming = ({ navigation, route }) => {
                         },
                     }
                 );
-                likeStatuses[video.id] = res.data.is_like;
+                likeStatuses[video.id] = res.data.is_Like;
             }
             setLikedPosts(likeStatuses);
         } catch (error) {
